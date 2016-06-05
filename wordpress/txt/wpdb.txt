@@ -1,0 +1,318 @@
+
+
+SQL Queries for WordPress
+
+
+CHANGE SITEURL & HOMEURL
+
+UPDATE wp_options SET option_value = replace(option_value, 'http://www.oldsiteurl.com', 'http://www.newsiteurl.com') WHERE option_name = 'home' OR option_name = 'siteurl';
+
+
+
+updating media links after moving site
+
+UPDATE wp_posts SET post_content=(REPLACE (post_content, 'old url','new url'));
+
+
+
+CHANGE GUID
+
+UPDATE wp_posts SET guid = REPLACE (guid, 'http://www.oldsiteurl.com', 'http://www.newsiteurl.com');
+
+
+CHANGE URL IN CONTENT
+
+UPDATE wp_posts SET post_content = REPLACE (post_content, 'http://www.oldsiteurl.com', 'http://www.newsiteurl.com');
+
+
+
+UPDATE POST META
+
+UPDATE wp_postmeta SET meta_value = REPLACE (meta_value, 'http://www.oldsiteurl.com','http://www.newsiteurl.com');
+
+
+
+CHANGE DEFAULT "ADMIN" USERNAME
+
+UPDATE wp_users SET user_login = 'Your New Username' WHERE user_login = 'Admin';
+
+
+
+RESET PASSWORD
+
+
+UPDATE wp_users SET user_pass = MD5( 'new_password' ) WHERE user_login = 'your-username';
+
+
+
+DELETE REVISION
+
+
+DELETE a,b,c FROM wp_posts a
+LEFT JOIN wp_term_relationships b ON (a.ID = b.object_id)
+LEFT JOIN wp_postmeta c ON (a.ID = c.post_id)
+WHERE a.post_type = 'revision'
+
+
+
+WordPress provides a class of functions for all database manipulations. The class is called wpdb.Methods in the wpdb() class should not be called directly. Use the global $wpdb object instead!The $wpdb object can be used to read data from any table in the WordPress database (such as custom plugin tables), not just the standard tables that WordPress creates. 
+
+
+
+SELECT Generic Results
+
+<?php $wpdb->get_results( 'query', ARRAY_A ); ?> 
+
+$myrows = $wpdb->get_results( "SELECT id, name FROM mytable" );
+
+
+Run Any Query on the Database
+
+<?php $wpdb->query('query'); ?> 
+
+
+Note: As with all functions in this class that execute SQL queries, you must SQL escape all inputs (e.g., esc_sql($user_entered_data_string) or $wpdb->prepare( 'query' , value_parameter[, value_parameter ... ] );). 
+
+
+$wpdb->query( 
+	$wpdb->prepare( 
+		"
+                DELETE FROM $wpdb->postmeta
+		 WHERE post_id = %d
+		 AND meta_key = %s
+		",
+	        13, 'gargle' 
+        )
+);
+
+
+
+
+SELECT a Variable
+
+
+ <?php $wpdb->get_var( 'query', column_offset, row_offset ); ?> 
+
+ <?php
+$user_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->users" );
+echo "<p>User count is {$user_count}</p>";
+?>
+
+
+
+SELECT a Row
+
+To retrieve an entire row from a query, use get_row. The function can return the row as an object, an associative array, or as a numerically indexed array.
+
+
+<?php $wpdb->get_row('query', ARRAY_A, row_offset); ?> 
+
+
+
+INSERT rows
+
+
+ <?php $wpdb->insert( $table, $data, $format ); ?> 
+
+ $wpdb->insert( 
+	'table', 
+	array( 
+		'column1' => 'value1', 
+		'column2' => 123 
+	), 
+	array( 
+		'%s', 
+		'%d' 
+	) 
+);
+
+
+
+
+
+UPDATE rows
+
+
+
+<?php $wpdb->update( $table, $data, $where, $format = null, $where_format = null ); ?> 
+
+
+$wpdb->update( 
+	'table', 
+	array( 
+		'column1' => 'value1',	// string
+		'column2' => 'value2'	// integer (number) 
+	), 
+	array( 'ID' => 1 ), 
+	array( 
+		'%s',	// value1
+		'%d'	// value2
+	), 
+	array( '%d' ) 
+);
+
+
+
+DELETE Rows
+
+
+<?php $wpdb->delete( $table, $where, $where_format = null ); ?>
+
+
+$wpdb->delete( 'table', array( 'ID' => 1 ) );
+
+
+
+Protect Queries Against SQL Injection Attacks
+
+
+$wpdb->query( $wpdb->prepare( 
+	"
+		INSERT INTO $wpdb->postmeta
+		( post_id, meta_key, meta_value )
+		VALUES ( %d, %s, %s )
+	", 
+        10, 
+	$metakey, 
+	$metavalue 
+) );
+
+
+
+Show and Hide SQL Errors
+
+
+ <?php $wpdb->show_errors(); ?> 
+ <?php $wpdb->hide_errors(); ?> 
+
+
+
+From here, we can print out certain values:
+
+<!--?php  
+echo $last_post['post_title'];  
+?-->  
+
+Print the entire array:
+
+<!--?php print_r($last_post); ?-->  
+
+Or even loop through the results:
+<!--?php  
+foreach($last_post as $post) {  
+    echo $post;  
+}  
+?-->  
+
+
+
+Read An Entire Column
+
+<!--?php  
+global $wpdb;  
+$post_titles = $wpdb--->get_col("SELECT post_title FROM $wpdb->posts WHERE post_status = 'publish' ORDER BY post_date DESC");  
+?>  
+
+The results are returned in a numerically indexed array such that we can loop through the or access them by their numeric keys:
+
+
+<!--?php echo $post_titles[0]; ?-->  
+
+
+What About Generic Results
+
+
+<!--?php  
+global $wpdb;  
+$scheduled_posts = $wpdb--->get_results("SELECT post_title, post_date FROM $wpdb->posts WHERE post_status = 'future' ORDER BY post_date DESC", ARRAY_A);  
+  
+foreach($scheduled_posts as $post) {  
+    echo $post['post_title'];  
+    echo $post['post_date'];  
+}  
+?>  
+
+
+Security Measures
+
+
+<?php  
+$query = "INSERT INTO $wpdb->posts (post_id, post_title) VALUES (%d, %s)";  
+$wpdb->query($wpdb->prepare($query, 10, 'Post Title Example'));  
+?>  
+
+Inserting New Values
+
+
+<?php  
+  
+global $wpdb;  
+  
+$term_id = 100; // note that this may need to be adjusted based on the ID's in your table  
+$name = 'Code Snippet'; 
+$slug = 'code-snippet'; 
+ 
+// add the new category 
+$query = "INSERT INTO $wpdb->terms (term_id, name, slug) VALUES (%d, %s, %s)"; 
+$wpdb->query($wpdb->prepare($query, $term_id, $name, $slug)); 
+ 
+// create the relationship 
+$term_taxonomy_id = 100; 
+$taxonomy = 'category';  
+$query = "INSERT INTO $wpdb->term_taxonomy (term_taxonomy_id, term_id, taxonomy) VALUES (%d, %d, %s)";  
+$wpdb->query($wpdb->prepare($query, $term_taxonomy_id, $term_id, $taxonomy));  
+  
+?>
+
+
+Updating Existing Values
+
+<?php  
+global $wpdb;  
+// Custom Keywords and Link Option Test  
+$wpdb->update("$wpdb->posts", array('post_title' => 'First Post!'), array('ID' => 645));  
+?>  
+
+
+<?php  
+global $wpdb;  
+$wpdb->update("$wpdb->term_taxonomy", array('taxonomy' => 'category_demo'), array('taxonomy' => 'post_tag'));  
+?>  
+
+
+Formatting SQL statements 
+
+
+Functions that update the database should expect their parameters to lack SQL slash escaping when passed. Escaping should be done as close to the time of the query as possible, preferably by using $wpdb->prepare()
+
+$wpdb->prepare() is a method that handles escaping, quoting, and int-casting for SQL queries. It uses a subset of the sprintf() style of formatting. Example :
+
+$var = "dangerous'"; // raw data that may or may not need to be escaped
+$id = some_foo_number(); // data we expect to be an integer, but we're not certain
+ 
+$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_title = %s WHERE ID = %d", $var, $id ) );
+
+
+
+Creating or Updating the Table
+
+
+global $wpdb;
+$sql = "CREATE TABLE $table_name (
+  id mediumint(9) NOT NULL AUTO_INCREMENT,
+  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+  name tinytext NOT NULL,
+  text text NOT NULL,
+  url VARCHAR(55) DEFAULT '' NOT NULL,
+  UNIQUE KEY id (id)
+);";
+
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+dbDelta( $sql );
+
+
+
+
+
+
+ 

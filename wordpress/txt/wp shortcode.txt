@@ -1,0 +1,222 @@
+Simple Shortcode
+
+[recent-posts]
+
+ The basic steps are:
+Create the function, which will be called by WordPress when it finds a shortcode.
+Register the shortcode by setting a unique name.
+Tie the registration function to a WordPress action.
+All codes in this tutorial can be placed in functions.php or in a seperate PHP file that will be included in functions.php.
+
+function recent_posts_function() {
+   query_posts(array('orderby' => 'date', 'order' => 'DESC' , 'showposts' => 1));
+   if (have_posts()) :
+      while (have_posts()) : the_post();
+         $return_string = '<a href="'.get_permalink().'">'.get_the_title().'</a>';
+      endwhile;
+   endif;
+   wp_reset_query();
+   return $return_string;
+}
+
+
+REGISTER THE SHORTCODE
+
+
+Now, we tell WordPress that this function is a shortcode:
+
+function register_shortcodes(){
+   add_shortcode('recent-posts', 'recent_posts_function');
+}
+
+
+HOOK INTO WORDPRESS
+
+
+In order to execute our register_shortcodes() function, we will tie it to WordPress' initialization action:
+
+
+add_action( 'init', 'register_shortcodes');
+
+
+
+
+
+
+to display a certain number of recent posts
+
+
+function recent_posts_function($atts){
+   extract(shortcode_atts(array(
+      'posts' => 1,
+   ), $atts));
+
+   $return_string = '<ul>';
+   query_posts(array('orderby' => 'date', 'order' => 'DESC' , 'showposts' => $posts));
+   if (have_posts()) :
+      while (have_posts()) : the_post();
+         $return_string .= '<li><a href="'.get_permalink().'">'.get_the_title().'</a></li>';
+      endwhile;
+   endif;
+   $return_string .= '</ul>';
+
+   wp_reset_query();
+   return $return_string;
+}
+
+
+
+
+CONTENT IN SHORTCODE
+
+
+
+function recent_posts_function($atts, $content = null) {
+   extract(shortcode_atts(array(
+      'posts' => 1,
+   ), $atts));
+
+   $return_string = '<h3>'.$content.'</h3>';
+   $return_string .= '<ul>';
+   query_posts(array('orderby' => 'date', 'order' => 'DESC' , 'showposts' => $posts));
+   if (have_posts()) :
+      while (have_posts()) : the_post();
+         $return_string .= '<li><a href="'.get_permalink().'">'.get_the_title().'</a></li>';
+      endwhile;
+   endif;
+   $return_string .= '</ul>';
+
+   wp_reset_query();
+   return $return_string;
+}
+
+
+[recent-posts posts="5"]This is the list heading[/recent-posts]
+
+
+
+
+ENABLING SHORTCODES IN WIDGETS
+
+
+add_filter('widget_text', 'do_shortcode');
+
+
+
+
+Some Useful Shortcodes
+
+
+link button
+
+function linkbutton_function( $atts, $content = null ) {
+   return '<button type="button">'.do_shortcode($content).'</button>';
+}
+add_shortcode('linkbutton', 'linkbutton_function');
+
+
+
+[linkbutton]Click Me![/linkbutton]
+
+
+
+WORDPRESS MENU
+
+
+
+function menu_function($atts, $content = null) {
+   extract(
+      shortcode_atts(
+         array( 'name' => null, ),
+         $atts
+      )
+   );
+   return wp_nav_menu(
+      array(
+          'menu' => $name,
+          'echo' => false
+          )
+   );
+}
+add_shortcode('menu', 'menu_function');
+
+
+
+[menu name="main-menu"]
+
+
+
+
+GOOGLE MAPS
+
+
+function googlemap_function($atts, $content = null) {
+   extract(shortcode_atts(array(
+      "width" => '640',
+      "height" => '480',
+      "src" => ''
+   ), $atts));
+   return '<iframe width="'.$width.'" height="'.$height.'" src="'.$src.'&output=embed" ></iframe>';
+}
+
+add_shortcode("googlemap", "googlemap_function");
+
+
+When typing the shortcode, pass in the width and height and the link from Google Maps as parameters:
+
+[googlemap width="600" height="300" src="http://maps.google.com/maps?q=Heraklion,+Greece&hl=en&ll=35.327451,25.140495&spn=0.233326,0.445976& sll=37.0625,-95.677068&sspn=57.161276,114.169922& oq=Heraklion&hnear=Heraklion,+Greece&t=h&z=12"]
+
+
+
+
+
+call a list of related posts
+
+
+ paste this code in your functions.php file.
+function sc_liste($atts, $content = null) {
+        extract(shortcode_atts(array(
+                "num" => '5',
+                "cat" => ''
+        ), $atts));
+        global $post;
+        $myposts = get_posts('numberposts='.$num.'&order=DESC&orderby=post_date&category='.$cat);
+        $retour='<ul>';
+        foreach($myposts as $post) :
+                setup_postdata($post);
+             $retour.='<li><a href="'.get_permalink().'">'.the_title("","",false).'</a></li>';
+        endforeach;
+        $retour.='</ul> ';
+        return $retour;
+}
+add_shortcode("list", "sc_liste");
+
+
+To use it, simply paste the following in the WordPress editor, after switching to HTML mode:
+[liste num="3" cat="1"]
+
+
+
+ Get the Last Image Attached to a Post
+
+
+function sc_postimage($atts, $content = null) {
+	extract(shortcode_atts(array(
+		"size" => 'thumbnail',
+		"float" => 'none'
+	), $atts));
+	$images =& get_children( 'post_type=attachment&post_mime_type=image&post_parent=' . get_the_id() );
+	foreach( $images as $imageID => $imagePost )
+	$fullimage = wp_get_attachment_image($imageID, $size, false);
+	$imagedata = wp_get_attachment_image_src($imageID, $size, false);
+	$width = ($imagedata[1]+2);
+	$height = ($imagedata[2]+2);
+	return '<div class="postimage" style="width: '.$width.'px; height: '.$height.'px; float: '.$float.';">'.$fullimage.'</div>';
+}
+
+add_shortcode("postimage", "sc_postimage");
+
+
+
+[postimage size="" float="left"]
+

@@ -1,0 +1,185 @@
+<script type="text/javascript">
+   jQuery(document).ready(function(){
+      jQuery('nav#primary-nav ul.suckerfish').attr('id','menu');
+   });
+</script>
+
+
+when content load with ajax
+
+      jQuery(document).on('click','.details h6',function(){
+        var options = jQuery(this).text();
+        if (options != '') {jQuery('#keyword').val(options);}
+        else { return false; }
+
+      });
+
+
+
+   get browser width
+
+          get_width =   jQuery( window ).width();
+
+
+          detect if mobile or desktop
+
+           isMobile = {
+                          Android: function() {
+                              return navigator.userAgent.match(/Android/i);
+                          },
+                          BlackBerry: function() {
+                              return navigator.userAgent.match(/BlackBerry/i);
+                          },
+                          iOS: function() {
+                              return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                          },
+                          Opera: function() {
+                              return navigator.userAgent.match(/Opera Mini/i);
+                          },
+                          Windows: function() {
+                              return navigator.userAgent.match(/IEMobile/i);
+                          },
+                          any: function() {
+                              return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+                          }
+                      };
+
+
+  if( isMobile.any() )
+    'its mobile'
+
+
+
+    // parse the json response from php
+
+    var response =  jQuery.parseJSON(response);
+
+
+    // upload file name
+
+    jQuery("#exampleInputFile").on('change', function () {
+     upload_file_name = this.value;
+     jQuery('#uploadFile').text(upload_file_name);
+});
+
+
+get drop down option value with text
+
+     var cat_id = jQuery('#selectBox').val();
+    var cat_name = jQuery('#selectBox option:selected').text();
+
+
+    get selected checkbox values
+
+    jQuery('#delete-song').on('click',function() {
+    var song_ids = [ ];
+    jQuery('#delete-ids :checked').each(function () {
+        song_ids.push(jQuery(this).val());
+    });
+
+
+    remove multiple div with dynamic id
+
+    function remove_tab_div(song_ids)
+{
+    jQuery.each(song_ids, function(ind, val){
+      jQuery("#song_rank_"+val).remove();
+      jQuery("#song_new_"+val).remove();
+     jQuery("#song_rating_"+val).remove();
+    });
+}
+
+
+
+
+-------------------------------------------
+
+send form with image with AJAX
+
+
+  var image =   jQuery('#exampleInputFile')[0].files[0];
+
+   var  action =  "ajaxprofile";
+                        var formData = new FormData(form);
+                        formData.append("action", "ajaxprofile");
+                          formData.append("email", email);
+                         jQuery(".error").css('display', 'none');
+                         jQuery.ajax({
+                         type: 'POST',
+                          url: ajax_login_object.ajaxurl,
+                         data:  formData ,
+                          contentType: false,
+                          cache: false,
+                          processData:false,
+
+
+
+
+
+
+jquery conflict updated
+
+
+   <script type="text/javascript">
+    jQuery(document).ready(function($){
+   alert("hello");
+});
+
+    </script>
+
+
+
+Drop down select AJAX
+
+
+  $("#surgery").change(function(){
+     $.ajax({
+      url:"sub_surgery.php",
+      type:"POST",
+    data:'cat='+$("#surgery").val(),
+     success:function(msg){
+      $("#result").html(msg);
+      $("#errorsurgery").hide();
+     }
+     });
+    });
+  });
+
+
+
+  to display result on second drop down
+
+  $(document).ajaxComplete(function(){
+    $("#price").change(function(){
+      $.ajax({
+        url:"price.php",
+        type:"POST",
+        data:'price='+$("#price").val(),
+        success:function(msg){
+          $("#price-txt").html(msg);
+          $("#errorsubsurgery").hide();
+        }
+      });
+    });
+
+
+
+How to check if select box is selected or not
+
+ $("#next").click(function(){
+
+      if ($("#surgery")[0].selectedIndex == 0) {
+              $("#errorsurgery").text("Please select surgery");
+                return false;
+     }
+
+
+     for 2nd multidrop down ajax
+
+       $(document).ajaxComplete(function(){
+   $("#next").click(function(){
+
+      if ($("#price")[0].selectedIndex == 0) {
+        $("#errorsubsurgery").text("Please select sub-surgery");
+                return false;
+            }

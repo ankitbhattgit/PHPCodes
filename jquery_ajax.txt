@@ -1,0 +1,125 @@
+
+
+<SCRIPT LANGUAGE="JavaScript" SRC="jquery.js"></script>
+<script language="javascript">
+	function bookparty()
+	{
+		var name=document.getElementById("name2").value;
+		var cell=document.getElementById("cell").value;
+		var email=document.getElementById("email2").value;
+        JQ(document).ready(function() {
+		JQ.ajax({
+						type: 'POST',
+						cache: false,
+						url: 'partyform.php',
+data: "name="+name+"&cell="+cell+"&email="+email,
+						success: function(data)
+						{
+						document.getElementById('call_add_pro').style.display = "none";
+						document.getElementById('bookAPartyOverlay').style.display = "block";
+						document.getElementById('overlay_form').style.display = "none";
+						document.getElementById('partysuccess').style.display = "block";
+					    }
+					});
+				});	
+	}
+	</script>
+
+
+
+
+
+jquery no conflict
+
+first remove any old version of the jquery
+
+<script type="text/javascript">
+	var abc=jQuery.noConflict();
+	abc(document).ready(function(){
+	abc('#fade').cycle();
+	});
+
+</script>
+
+
+Validation script 
+
+
+http://formvalidator.net/
+
+
+
+
+Edit html content from jquery
+
+<script type="text/javascript">
+
+jQuery(document).ready(function(){
+jQuery(".post-footer div a").html("Read more...");
+});
+
+</script>
+
+
+
+
+checking that email id is not a free one 
+
+
+$('.keyup-email-2').keyup(function() {
+    $('span.error-keyup-8').remove();
+    var inputVal = $(this).val();
+    var emailFreeReg= /^([\w-\.]+@(?!gmail.com)(?!yahoo.com)(?!hotmail.com)(?!aol.com)([\w-]+\.)+[\w-]{2,4})?$/;
+    if(!emailFreeReg.test(inputVal)) {
+        $(this).after('<span class="error error-keyup-8">No Free Email Addresses.</span>');
+    }
+});
+
+
+
+checking first and last 2 input 
+
+
+<script>
+jQuery(document).ready(function()
+{
+	jQuery("#signup_submit").click(function()
+	{
+	 
+	 var hasError = false;
+	 var checkstart = /^[a-zA-Z]{2}/;
+	 var checkend = /[a-zA-Z]{2}$/;
+	 var postal = jQuery("#field_3").val();
+	 var len= postal.length;
+	 if(len == 9 )
+	 {
+	 if(!checkstart.test(postal)) 
+	 {
+	 		alert('First two character should be alphabet eg -AA23A43BB');
+	        return false;
+	 }
+	 
+ if(!checkend.test(postal)) 
+	 {
+			alert('Last two character should be alphabet eg -AA23A43BB');
+	        return false;
+	 }
+    }
+    else
+    {
+    	alert('Postal code length should be 9');
+    	return false;
+    }
+    });
+});
+</script>
+
+
+
+
+
+
+Horizontal 3 image slider
+
+
+http://www.gmarwaha.com/jquery/jcarousellite/index.php?#install

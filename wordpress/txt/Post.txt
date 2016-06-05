@@ -1,0 +1,284 @@
+
+
+
+
+$post->post_author
+$post->post_date
+$post->post_date_gmt
+$post->post_content
+$post->post_content_filtered
+$post->post_title
+$post->post_excerpt
+$post->post_status
+$post->post_type
+$post->comment_status
+$post->ping_status
+$post->post_password
+$post->post_name
+$post->to_ping
+$post->pinged
+$post->post_modified
+$post->post_modified_gmt
+$post->post_parent
+$post->menu_order
+$post->guid
+
+
+
+query posts
+
+query_posts() is a way to alter the main query that WordPress uses to display posts. It does this by putting the main query to one side, and replacing it with a new query. To clean up after a call to query_posts, make a call to wp_reset_query(), and the original main query will be restored.
+
+
+query_posts( 'posts_per_page=5' );
+
+while ( have_posts() ) : the_post();
+    echo '<li>';
+    the_title();
+    echo '</li>';
+endwhile;
+
+
+have posts
+
+
+<?php have_posts(); ?>
+
+<?php
+if ( have_posts() ) :
+	while ( have_posts() ) : the_post();
+		// Your loop code
+	endwhile;
+else :
+	echo wpautop( 'Sorry, no posts were found' );
+endif;
+?>
+
+
+
+the post
+
+
+Iterate the post index in The Loop. Retrieves the next post, sets up the post, sets the 'in the loop' property to true.
+
+
+<?php the_post(); ?>
+
+
+
+<?php
+while ( have_posts() ) : the_post();
+	echo '<h2>';
+	the_title();
+	echo '</h2>';
+	the_content();
+endwhile;
+?>
+
+
+
+
+
+get post
+
+Takes a post ID and returns the database record for that post. You can specify, by means of the $output parameter, how you would like the results returned.
+
+    	<?php
+$post_content = get_post(54, ARRAY_A);
+$title = $post_content['post_title'];
+?>
+    <h2><?php echo $title ?></h2>
+    <p>  
+<?php
+$content = $post_content['post_content'];
+echo $content;
+?> 
+ </p>
+    <h3><a href="<?php  echo get_permalink( 54 );  ?>"> Read More >> </a></h3>
+
+<?php
+$id=74;
+$post = get_post($id);
+$title = apply_filters('the_title', $post->post_title);
+echo $title;
+$content = apply_filters('the_content', $post->post_content);
+echo $content;
+?>
+
+
+get posts
+
+
+The most appropriate use for get_posts is to create an array of posts based on a set of parameters. It retrieves a list of latest posts or posts matching this criteria. 
+
+
+query_posts also uses WP_Query, but is not recommended because it directly alters the main loop by changing the variables of the global variable $wp_query. get_posts, on the other hand, simply references a new WP_Query object, and therefore does not affect or alter the main loop.
+
+
+<?php $args = array(
+	'posts_per_page'   => 5,
+	'offset'           => 0,
+	'category'         => '',
+	'orderby'          => 'post_date',
+	'order'            => 'DESC',
+	'include'          => '',
+	'exclude'          => '',
+	'meta_key'         => '',
+	'meta_value'       => '',
+	'post_type'        => 'post',
+	'post_mime_type'   => '',
+	'post_parent'      => '',
+	'post_status'      => 'publish',
+	'suppress_filters' => true ); ?>
+
+
+	<?php $posts_array = get_posts( $args ); ?> 
+
+
+
+get_pages
+
+This function returns an array of pages that are in the blog, optionally constrained by parameters.
+
+	<?php get_pages( $args ); ?> 
+
+
+custom post
+
+
+
+
+Open functions.php and add the code
+
+
+register_post_type('movies',array(
+
+'label'=> 'Movies',
+'public'=>true,
+'show_ui'=>true,
+'capability_type'=>'post',
+'hierarchical'=>false,
+'rewrite'=>array('slug'=>'movies'),
+'query_var'=>true,
+'supports'=>array('title','editor','excerpt',
+	'custom-fields','thumbnails',
+	'author',)
+	));
+
+
+
+	It will add a new post type in the admin section
+
+
+	Then create a new file name single-movies.php
+
+
+get the contents from a single page
+
+<?php
+$id=7;
+echo get_the_title($id);
+$page=get_page($id);
+$content=$page->post_content;
+echo $content;
+?>
+
+
+
+
+
+Changing the default ... to read more in excerpt
+
+
+function new_excerpt_more( $more ) {
+	return ' <a class="read-more" href="'. get_permalink( get_the_ID() ) . '">  Read More </a>';
+}
+add_filter( 'excerpt_more', 'new_excerpt_more' );
+
+
+we are using get_permalink instead of the_permalink as the later one is always used inside the loop.
+
+
+
+
+
+Get the contents from a single page with thumbnail in excerpt form
+
+
+<?php query_posts("page_id=63");
+        while ( have_posts() ) : the_post()
+?>
+    <h1><a href="<?php echo the_permalink(); ?>"><?php echo get_the_title();?></a></h1>
+<?php echo get_the_post_thumbnail($page->ID,'medium'); ?>
+<?php global $more;
+ $more=0;
+ ?>
+ <?php the_excerpt(); ?>
+or
+<?php the_content("READ MORE"); ?>
+
+<?php
+    endwhile; 
+    wp_reset_query();
+?> 
+
+
+
+
+
+get the content till the read more tag
+
+<?php the_content( __( 'Continue reading <span class="meta-nav">→</span>', 'twentyten' ) ); ?> 
+
+
+
+How to show only text of post or page (no image)
+
+echo strip_tags(get_the_content(), '<p><a><h2><blockquote><code><ul><li><i><em><strong>')
+
+
+
+
+
+Retrieve the most recent posts.
+
+
+<?php wp_get_recent_posts( $args, $output ) ?>
+
+<h2>Recent Posts</h2>
+<ul>
+<?php
+	$args = array( 'numberposts' => '5' );
+	$recent_posts = wp_get_recent_posts( $args );
+	foreach( $recent_posts as $recent ){
+		echo '<li><a href="' . get_permalink($recent["ID"]) . '" title="Look '.esc_attr($recent["post_title"]).'" >' .   $recent["post_title"].'</a> </li> ';
+	}
+?>
+</ul>
+
+
+
+Show different title in blog and single page 
+
+Add a custom field with name and value and then in single.php replace the_title with following code -:
+
+	 $title = get_post_meta($post->ID, "custom-title", true);
+				if ($title != "") {
+				echo $title;
+				} 
+			  else {
+				 the_title();
+			  } 
+
+
+
+
+Style Posts Individually
+
+
+<?php while (have_posts()) : the_post(); ?>
+<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
+<h3><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h3>
+<?php the_content(); ?>
+</div>
+<?php endwhile; 

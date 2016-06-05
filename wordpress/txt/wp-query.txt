@@ -1,0 +1,54 @@
+WP_Query is a class defined in wp-includes/query.php that deals with the intricacies of a posts (or pages) request to a WordPress blog. The wp-blog-header.php (or the WP class in Version 2.0) gives the $wp_query object information defining the current request, and then $wp_query determines what type of query it's dealing with (possibly a category archive, dated archive, feed, or search), and fetches the requested posts.
+
+
+WP_Query provides numerous functions for common tasks within The Loop. To begin with, have_posts(), which calls $wp_query->have_posts(), is called to see if there are any posts to show. If there are, a while loop is begun, using have_posts() as the condition. This will iterate around as long as there are posts to show. In each iteration, the_post(), which calls $wp_query->the_post() is called, setting up internal variables within $wp_query and the global $post variable 
+
+
+
+Show Post/Page by ID
+
+Display post by ID:
+
+$query = new WP_Query( 'p=7' );
+
+
+
+
+Display page by ID:
+
+$query = new WP_Query( 'page_id=7' );
+
+
+
+Show x Posts per page
+
+Display 3 posts per page:
+
+$query = new WP_Query( 'posts_per_page=3' );
+
+while ( $query->have_posts() ) : $query->the_post();
+
+
+
+Show Posts from page x
+
+Display posts from page number 6:
+
+$query = new WP_Query( 'paged=6' );
+
+
+
+Show Posts for One Category
+
+
+$query = new WP_Query( 'cat=4' );
+
+or
+
+$query = new WP_Query( 'category_name=staff' );
+
+
+Exclude Posts Belonging to Category
+
+
+$query = new WP_Query( 'cat=-12,-34,-56' );

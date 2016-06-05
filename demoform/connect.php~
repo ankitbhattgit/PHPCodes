@@ -1,0 +1,5 @@
+<?Php
+$con = mysql_connect('localhost','root', 'redhat') or die("Unable to connect to MySQL");
+$db = mysql_select_db("ajax_cate",$con) or die("Unable to Select db");
+
+?>

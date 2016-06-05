@@ -1,0 +1,335 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/*body {
+    font-size: 62.5%;
+    font-family: Helvetica, sans-serif;
+    background: url(images/stripe.png) repeat;
+}*/
+
+body {
+    background-color: #000000;
+    font-family: Helvetica,sans-serif;
+    font-size: 100%;
+}
+
+p {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+}
+
+#page {
+    background: none repeat scroll 0 0 white;
+    height: auto !important;
+    margin: 20px auto;
+    min-height: 550px;
+    padding: 20px 50px;
+    width: 660px;
+    overflow: hidden;
+}
+
+#contact-area {
+    width: 600px;
+    margin-top: 0px;
+}
+
+
+.contact {
+    font-family: Georgia;
+    font-size: 30px;
+    text-align: center;
+}
+
+#contact-area input, #contact-area textarea #contact-area select{
+    border: 1px solid #CCCCCC;
+    font-family: Helvetica,sans-serif;
+    font-size: 1.4em;
+    margin: 0 0 25px;
+    padding: 5px;
+    width: 471px;
+}
+
+#contact-area textarea {
+    height: 90px;
+}
+
+#contact-area textarea:focus, #contact-area input:focus {
+    border: 2px solid #900;
+}
+
+#contact-area input.submit-button {
+    width: 100px;
+    float: right;
+}
+
+label {
+    float: left;
+    text-align: right;
+    margin-right: 15px;
+    width: 100px;
+    padding-top: 5px;
+    font-size: 1.4em;
+}
+
+.hasDatepicker
+{
+    width: 160px !important;
+}
+
+#result p
+{
+font-size: 1.4em;
+    margin-right: 15px;
+    padding-top: 5px;
+    text-align: right;
+    width: 100px;
+}
+
+
+
+.surgery-area
+{
+    font-family: Helvetica,sans-serif;
+    margin: 13px 0 18px;
+    
+    width: 640px;
+}
+
+.surgery-area label 
+{
+   float: left;
+    font-size: 1.4em;
+    margin-right: 15px;
+    padding-top: 0;
+    width: 180px;
+}
+
+#price > label {
+    margin-top: -5px;
+}
+
+.clear
+{
+    clear: both;
+}
+
+.next
+{
+     float: right;
+    width: 90px;
+    border: 1px solid #CCCCCC;
+    font-size: 1.4em;
+    margin-top: 20px;
+    padding-top: 3px;
+    background-color: #F2F1F0;
+    text-align: center;
+}
+.next input 
+{
+    text-decoration: none;
+    color: #0E0E0E;
+    border: none;
+    background: none;
+     font-size: 1em;
+     cursor: pointer;
+}
+
+
+.prev
+{
+     float: left;
+    width: 90px;
+    border: 1px solid #CCCCCC;
+    font-size: 1.4em;
+    margin: 0;
+    padding-top: 3px;
+    background-color: #F2F1F0;
+    text-align: center;
+}
+.prev a 
+{
+    text-decoration: none;
+    color: #0E0E0E;
+}
+.next a 
+{
+    text-decoration: none;
+    color: #0E0E0E;
+}
+
+
+.surgery-area > select
+{
+    width: 300px;
+}
+
+
+
+.country {
+    font-family: Helvetica,sans-serif;
+    margin-bottom: 25px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 15px;
+    width: 517px;
+}
+
+
+.country  label {
+    float: left;
+    font-size: 1.4em;
+    margin-right: 15px;
+    padding-top: 0;
+    width: 180px;
+}
+
+
+
+
+#register-form > div {
+    color: red;
+    font-size: 15px;
+    text-align: center;
+}
+
+#validname
+{
+      margin-bottom: 10px;
+    margin-top: -15px;
+}
+#validphone
+{
+      margin-bottom: 10px;
+    margin-top: -15px;
+}
+#validemail
+{
+      margin-bottom: 10px;
+    margin-top: -15px;
+}
+
+
+#details-area {
+    margin-top: 15px;
+    width: 670px;
+    overflow: hidden;
+}
+
+
+#details-area label {
+    float: left;
+    font-size: 1.6em;
+    margin-right: 0px;
+    padding-top: 0px;
+    padding-right: 20px;
+    text-align: right;
+    width: 175px;
+}
+
+#details-area p
+{
+  float: right;
+    margin-top: -30px;
+    text-align: center;
+    width: 480px;
+}
+
+#details-area span
+{
+  float: right;
+    margin-bottom: 0;
+    padding-top: 2px;
+    text-align: center;
+    width: 500px;
+     font-size: 1.2em;
+     margin-top: -30px;
+}
+
+#errorsurgery {
+    color: red;
+    text-align: center;
+}
+
+#errorsubsurgery {
+    color: red;
+    text-align: center;
+}
+
+#errorsource {
+    color: red;
+    text-align: center;
+}
+
+#errordestination {
+    color: red;
+    text-align: center;
+}
+
+#errorairport {
+    color: red;
+    text-align: center;
+}
+
+#errordate {
+    color: red;
+    
+}
+#error_ratings{
+    color: red;
+    text-align: center;
+}
+#error_hotels{
+    color: red;
+    text-align: center;
+}
+
+#snippet_searchpanel {
+    float:left;
+}
+
+
+  #loader-img{
+   
+    top: 40%;
+    margin-left:200px; 
+    display: none;
+  }
+
+  .radiobutton
+  {
+    text-align: center;
+    width: 30px;
+  }
+
+  .hotelname
+  {
+     text-align: center;
+    width: 200px;
+  }
+  
+   .hoteldescription
+  {
+     text-align: center;
+    width: 370px;
+  }
+
+  .hotelprice
+  {
+    text-align: center;
+    width: 85px;
+  }
+
+  .tick img
+  {
+    float: left;
+
+  }
+
+
+
+.box > button {
+    margin-left: 18px;
+    border: none;
+}

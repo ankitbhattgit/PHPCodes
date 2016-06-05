@@ -1,0 +1,97 @@
+The lists of WordPress Reserved Variable
+
+
+$_template_file = string
+$require_once = boolean
+$posts = array
+$post = object
+$wp_did_header = boolean
+$wp_did_template_redirect = NULL
+$wp_query = object
+$wp_rewrite = object
+$wpdb = object
+$wp_version = string
+$wp = object
+$id = integer
+$comment = NULL
+$user_ID = integer
+$cat = string
+$paged = integer
+$error = string
+$m = integer
+$p = integer
+$post_parent = string
+$subpost = string
+$subpost_id = string
+$attachment = string
+$attachment_id = integer
+$name = string
+$static = string
+$pagename = string
+$page_id = integer
+$second = string
+$minute = string
+$hour = string
+$day = integer
+$monthnum = integer
+$year = integer
+$w = integer
+$category_name = string
+$tag = string
+$tag_id = string
+$author_name = string
+$feed = string
+$tb = string
+$comments_popup = string
+$meta_key = string
+$meta_value = string
+$preview = string
+$s = string
+$sentence = string
+$fields = string
+$category__in = array
+$category__not_in = array
+$category__and = array
+$post__in = array
+$post__not_in = array
+$tag__in = array
+$tag__not_in = array
+$tag__and = array
+$tag_slug__in = array
+$tag_slug__and = array
+$ignore_sticky_posts = boolean
+$suppress_filters = boolean
+$cache_results = boolean
+$update_post_term_cache = boolean
+$update_post_meta_cache = boolean
+$post_type = string
+$posts_per_page = integer
+$nopaging = boolean
+$comments_per_page = string
+$no_found_rows = boolean
+$order = string
+
+
+
+
+
+
+
+
+Here is a list of NAMES YOU CAN NOT USE in your WordPress theme filenames or the theme’s name for that matter:
+
+index.php
+comments.php
+font-page.php
+home.php
+single.php
+404.php
+page.php
+category.php
+tag.php
+taxonomy.php
+author.php
+date.php
+archive.php
+search.php
+attachment.php

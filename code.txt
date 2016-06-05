@@ -1,0 +1,490 @@
+
+string position
+
+<?php
+$string="This is string and it is an eg of finding string position";
+$find='string';
+$find_length=strlen($find);
+$offset=0;
+while($string_positon=strpos($string,$find,$offset))
+
+{
+
+    echo '<b>'. $find . '</b>'. ' found at ' . $string_positon . '<br>';
+    $offset=$string_positon + $find_length;
+}
+?>
+
+
+string replace
+
+<?php
+$string="Dont search this part.Search this part";
+$string_new=substr_replace($string,'ankit',34,4);
+echo $string_new . '<br>';
+?>
+
+reverse
+
+<?php
+$string="This is string eg .";
+echo strrev($string);
+?>
+
+strip_tags
+
+<?php
+$str="<b>hello</b>";
+echo $str."<br>";
+echo strip_tags($str);
+?>
+
+sub string
+
+<?php
+$string="This is string eg .";
+$half=substr($string,0,5);
+echo $half . '<br>';
+$half=substr($string,0,strlen($string)/2);
+echo $half;
+?>
+
+trim
+
+<?php
+$string="&nbsp;&nbsp;This &nbsp;is &nbsp;first &nbsp;string";
+echo $string . '<br>';
+$trim1= trim($string);
+echo $trim1;
+?>
+
+break array
+
+<?php
+//break the array according to offset value
+$arr1=array("a","b","c","d");
+$arr2=array_chunk($arr1,2);
+print_r($arr2) . "<br/>";
+?>
+
+get element of first array which are not in 2
+
+<?php
+$arr1=array("a","b","c","d");
+$arr2=array("a","c","g","h");
+$arr3=array_diff($arr1,$arr2);
+
+print_r($arr3) . "<br/>";
+?>
+
+search for elemet with function
+
+<?php
+function check($a)
+{
+    if($a==="dog")
+    {
+        return true;
+    }
+    return false;
+}
+$arr1=array("a","b","c","dog");
+$arr2=array_filter($arr1,"check");
+print_r($arr2) . "<br/>";
+?>
+
+common element
+
+<?php
+$arr1=array("a","b","c","d");
+$arr2=array("a","b","e","f");
+$arr3=array_intersect($arr1,$arr2);
+print_r($arr3) . "<br/>";
+?>
+
+sorting(changes key value)
+
+<?php
+//for sorting and keeping index values;
+$arr1=array("vvvghgf","oofhj","hgjh","yuyu");
+echo "before sorting<br/>";
+print_r($arr1);
+ echo "<br/>";
+ asort($arr1);
+ //sort according to indexes and it doesn't return anything
+echo "after sorting<br/>";
+print_r($arr1) . "<br/>";
+?>
+
+count
+
+<?php
+$arr1=range(0,50);
+foreach ($arr1 as $key => $value) {
+    echo $value;
+}
+echo '<br>'.count($arr1);
+
+?>
+
+count no of repetition in array
+<?php
+//get only distinct values
+$arr1=array("a","b","c","d","b","c");
+$arr2=array_count_values($arr1);
+
+print_r($arr2) . "<br/>";
+?>
+
+convert string to array
+
+<?php
+$food='salad,vegetables,pasta';
+echo "before explode <br/>";
+echo $food.'<br/>';
+echo "after explode <br/>";
+$newfood=explode(',', $food);
+print_r($newfood);
+?>
+
+
+ convert array to string
+<?php
+$name = array('ankit','bhatt');
+$string=implode('',$name);
+echo $string;
+?>
+
+
+element exist
+
+<?php
+$food=array('salad','vegetables','pasta');
+if (in_array('salad', $food)) {
+    echo "it exists";
+}
+else
+{
+    echo "not exist";
+}
+?>
+
+key exists
+
+<?php
+$food=array('healthy'=>
+                 array('salad','vegetables','pasta'),
+           'unhealthy'=>
+                array('pizza','icecream' ));
+
+if (array_key_exists('healthy',$food)) {
+    echo "it exists";
+}
+else
+{
+    echo "not exists";
+}
+?>
+
+
+key sort
+
+<?php
+$cricket=array('india'=>
+                 array('sachin','sehwag'),
+           'australia'=>
+                array('ponting','warne' ),
+             'england'=>
+                 array('peterson','flintoff')
+                );
+echo "before sorting<br/>";
+print_r($cricket);
+echo "<br> after sorting <br>";
+ksort($cricket);
+print_r($cricket);
+?>
+
+
+merge
+
+<?php
+$arr1=array("a","b","c","d");
+$arr2=array("e","f","g","h");
+$arr3=array_merge($arr1,$arr2);
+
+foreach ($arr3 as $key => $value) {
+    echo $value.'<br/>';
+}
+?>
+
+get keys
+
+<?php
+$food=array('healthy'=>
+                 array('salad','vegetables','pasta'),
+           'unhealthy'=>
+                array('pizza','icecream' ));
+
+
+print_r(array_keys($food));
+?>
+
+get values
+
+<?php
+$food=array('healthy'=>
+                 array('salad','vegetables','pasta'),
+           'unhealthy'=>
+                array('pizza','icecream' ));
+
+
+print_r(array_values($food));
+?>
+
+array reverse
+
+<?php
+$arr1=array("a","b","c","d");
+$arr2=array_reverse($arr1);
+
+print_r($arr2) . "<br/>";
+?>
+
+search
+
+
+<?php
+//$food=array('salad','vegetables','pasta');
+$info=array('name'=>'ankit','city'=>'dehradun');
+
+if (array_search('ankit',$info)) {
+    echo "it exists";
+}
+else
+{
+    echo "not exists";
+}
+
+?>
+
+
+check for html tags
+
+to check for opening html tags
+
+/<[a-zA-Z][a-zA-Z0-9]*>/
+
+for closing tags
+
+/</?[a-zA-Z][a-zA-Z0-9]*(\s+[a-zA-Z]+="[^"]+")*>/
+
+
+
+bind jquery
+
+   $(document).ready(function() {
+   $("#replacehtml").bind('click',replacehtml);
+   });
+
+
+<?php
+echo "Factorial of 5  is -";
+$i=1;
+$fact=5;
+for($i=1;$i<5;$i++)
+{
+    $fact=$fact * $i;
+}
+echo $fact;
+?>
+
+<?php
+$file=fopen("file.txt","r") or exit("file  not found");
+while(!feof($file))
+{
+    echo fgets($file);
+     //echo fgetc($file);
+}
+fclose($file);
+?>
+
+
+<?php
+for(;;)
+{
+    echo "Ankit";
+}
+?>
+
+
+
+   calling parent class constructor
+
+   <?php
+class Parentclass
+{
+    function _construct()
+    {
+        echo "this is parent class";
+    }
+    function _destruct()
+    {
+        echo "parent destructor";
+    }
+}
+class Child extends Parentclass
+{
+    function _construct()
+    {
+        parent::_construct();
+        echo "In child class";
+    }
+}
+$ob1 = new Child();
+?>
+
+interface and multilevel inheritance
+
+
+<?php
+interface A
+{
+    function geta();
+}
+interface B
+{
+    function getb();
+}
+interface C
+{
+    function getc();
+}
+class D implements C, A, B
+{
+    function geta()
+    {
+        echo "this is from interface a" . "<br/>";
+    }
+    function getb()
+    {
+        echo "this is from interface b" . "<br/>";
+    }
+    function getc()
+    {
+        echo "this is from interface c" . "<br/>";
+    }
+}
+$obj = new D();
+$obj->geta();
+$obj->getb();
+$obj->getc();
+?>
+
+
+
+<?php
+echo "Following are the prime numbers from 1-50<br/>";
+for($i=2;$i<=50;$i++)
+{
+$flag=0;
+for($j=2;$j<=$i/2;$j++)
+if(($i%$j)==0)
+{
+$flag=1;
+break;
+}
+if($flag==0)
+
+echo $i."<br/>";
+}
+?>
+
+
+
+protected inheritance
+
+<?php
+class Customer
+{
+     protected $name;
+    public function setname($name)
+    {
+        $this->name=$name;
+    }
+     public function getname()
+    {
+        return $this->name . "<br/>";
+    }
+}
+class CustDiscount extends Customer
+{
+ public $discount;
+ public function setdata($discount,$name)
+ {
+    $this->discount=$discount;
+    $this->name=$name;
+ }
+ public function getdata()
+ {
+    $this->discount=$discount;
+    $this->name=$name;
+ }
+
+}
+$a=new Customer();
+$a->setname("Ankit");
+echo $a->getname();
+$b->setdata(20,"Ankit");
+echo  $name .  "gets" . $discount . "% discount";
+?>
+
+
+
+<?php
+for($i=1;$i<=5;$i++)
+{
+    for($j=0;$j<$i;$j++)
+    {
+        echo "*";
+    }
+    echo "<br/>";
+}
+?>
+
+
+<?PHP
+function swap(&$a,&$b)
+{
+    $temp;
+    $temp=$a;
+    $a=$b;
+    $b=$temp;
+
+}
+$a=5;
+$b=10;
+echo "Before swapping the values are \$a=" . $a . " \$b=" . $b . "<br/>" ;
+swap($a,$b);
+echo "After swapping the values are \$a=" . $a . " \$b=" . $b ;
+
+?>
+
+
+<?php
+$num = array('-14','-7','-2','-9','1');
+$numlen = count($num);
+$max = 0;
+for($i=0;$i<=$numlen;$i++)
+{
+    if($num[$i] > $max )
+    {
+        $max = $num[$i];
+    }
+}
+echo 'max no. is'. $max;
+?>
+
+strstr Returns part of string from the first occurrence of needle(sub string that we finding out ) to the end of string.
+$email= 'sonialouder@gmail.com';
+$domain = strstr($email, '@');
+echo $domain; // prints @gmail.com

@@ -1,0 +1,78 @@
+
+
+wp-load
+
+Bootstrap file for setting the ABSPATH constant and loading the wp-config.php file. The wp-config.php
+file will then load the wp-settings.php file, which will then set up the WordPress environment.
+
+
+how to load wp-load and other main files
+
+$location = $_SERVER['DOCUMENT_ROOT'];
+ 
+include ($location . '/wp-load.php');
+
+If its not in root, simply add the string to your $location variable like this:
+
+$location = $_SERVER['DOCUMENT_ROOT'] . '/your-wp-install';
+
+
+2nd method
+
+include (ABSPATH . 'wp-load.php');
+
+eg to load wp anywhere
+
+$location = $_SERVER['DOCUMENT_ROOT'];
+
+include ($location . '/wp-config.php');
+include ($location . '/wp-load.php');
+include ($location . '/wp-includes/pluggable.php');
+
+global $wpdb;
+
+if( !isset($wpdb) )
+{
+include ($location . '/wp-config.php');
+include ($location . '/wp-includes/wp-db.php');
+}
+
+
+// Start Test
+$args = array( //set up the query to only get admins
+'role' => 'Administrator',
+'fields' => 'all_with_meta'
+);
+
+$query = get_users( $args ); //use the get_users call
+
+// Set up the table
+echo '<table cellpadding="0" cellspacing="0" border="1"><tr><thead><th>Nice Name</th><th>Email</th></thead></tr>';
+// For each of the admins, make a table row
+foreach ($query as $query) {
+echo '<td>' . $query->user_nicename . '</td><td><a href="mailto:' . $query->user_email . '">' . $query->user_email . '</a></td></tr>';
+
+} //End foreach
+echo '</table>'; // close the table tag
+
+// End Test - comment out or delete from here to the above "Start Test"
+
+?>
+
+
+
+
+to get tag from the current post 
+
+ wp_get_post_tags($post->ID)
+
+to get category from the current post 
+
+
+ get_the_category($post->ID);
+
+
+
+turn debugging on
+
+define('WP_DEBUG', true);

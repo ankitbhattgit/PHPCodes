@@ -1,0 +1,21 @@
+Buyer (personal) account sandbox:
+pankaj_personal@gmail.com
+One sorking visa card: 4012888888881881
+Amex: 371449635398431
+====================================
+Test account: sandbox business
+pankaj.01sharma-facilitator@gmail.com
+pass: testing123
+Credential	API Signature
+API Username	pankaj.01sharma-facilitator_api1.gmail.com
+API Password	Q68LVTJ2CXSMH8TN
+Signature	AQU0e5vuZCvSg-XJploSa.sGUDlpALyEvBdQ.cQPng47a3mPLkaKrZwX
+Request Date	Aug 6, 2013 04:30:41 PDT
+====================================
+Primary Paypal Account(Developer):
+username: pankaj.01sharma@gmail.com
+password: @sector71
+
+ 
+
+paypal@202-ecommerce.com

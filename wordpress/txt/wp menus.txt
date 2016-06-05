@@ -1,0 +1,78 @@
+How to Highlight the Current Page when Using WordPress Navigation Menus
+
+
+
+li.current-menu-item {
+background: #3FAEA5;
+color:#fff;
+}
+So simple, right? Here’s how you might target the link itself:
+
+li.current-menu-item a {
+text-decoration: underline;
+background:#ccc;
+}
+
+
+If your theme supports the creation of multiple navigation menus, then you’ll need to be a bit more specific in your CSS if you want to have them styled differently. You can use Firebug to find the unique ID of your unordered list. It will contain the name you gave to your menu. If you have other menus with different styles on the page, then you’ll need to differentiate them in your CSS:
+
+
+#menu-main-pages li.current-menu-item {
+background: #3FAEA5;
+color:#fff;
+}
+
+
+
+
+ to give home page link in menus
+
+<a href=" <?php echo home_url(); ?> ">Home</a>
+
+
+How to display custom menus
+
+<div class="navbar tertiary tree-black-italic">
+    <div class="tree-navbar-inner limit-center">
+        <ul class="nav hidden-xs hidden-sm">
+            <?php
+
+$defaults = array(
+    'menu' => 'Parts',
+    'link_after' => '<li class="spacing_li"><span>/</span></li>',
+    'items_wrap' => '%3$s',
+);
+
+wp_nav_menu($defaults);
+?>
+        </ul>
+    </div>
+</div>
+
+ items_wrap is used to disable any predefined wordpress class and id.
+
+
+
+to show only page menus
+
+<?php wp_page_menu( $args ); ?>
+
+
+
+to show only categories in menus
+
+<?php wp_list_categories( $args ); ?>
+
+
+
+
+how to create custom menus
+
+
+in functions.php
+
+
+if(function_exists('register_nav_menu'))
+{
+	register_nav_menus(array('footer-menu' =>'Footer Menu'));
+}

@@ -1,0 +1,62 @@
+
+
+
+^ specifies the beginning of string and $ the end
+
+. represent anything
+
+to match all charcaters
+
+/[a-zA-Z]/
+or
+
+/[a-z]/i
+
+
+to check numbers
+
+/[0-9]/
+or
+/[\d]/
+
+to check space
+
+/\s/
+/ /
+
+to check for not letter not number and not underscore
+
+/[\D]/
+
+to check for letter number and underscore
+
+/\w/
+
+to check for not letter not number and not underscore
+
+/\W/
+
+to check for not
+
+/[^a-zA-Z]/
+
+the plus sign will check for all the character until it find something else
+
+/a+/
+
+the ? will check for character only once , it will check for zero or one
+
+/a+?/
+
+
+the * symbol will match for zero or more character
+
+/a*/
+
+limit the amount of match
+
+/a{5}/
+
+for giving min and max limit
+/a{5,10}/
+

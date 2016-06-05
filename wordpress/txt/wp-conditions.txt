@@ -1,0 +1,76 @@
+
+
+Check whether a page is home page or not 
+
+
+ The Main Page
+
+is_home() 
+    When the main blog page is being displayed.
+
+
+ The Front Page
+
+is_front_page() 
+    When the front of the site is displayed, whether it is posts or a Page.
+
+
+ The Administration Panels
+
+is_admin()
+    When the Dashboard or the administration panels are being displayed. 
+
+
+ A Single Post Page
+
+is_single() 
+    When any single Post (or attachment, or custom Post Type) page is being displayed. (False for Pages) 
+
+
+
+ A PAGE Page
+
+This section refers to WordPress Pages, not any generic webpage from your blog, or in other words to the built in post_type 'page'.
+
+is_page() 
+    When any Page is being displayed. 
+
+
+ A Category Page
+
+is_category() 
+    When any Category archive page is being displayed. 
+
+
+
+How to get value of custom codes
+
+$customcode= $cellfeatures=get_post_custom_values('name of custom code');
+
+ 
+
+To check whether a user is logged in
+
+is_user_logged_in()
+
+
+
+
+
+ Display Content Only To Registered Users
+
+To achieve this hack, we'll use a shortcode. The first step is to create it. Open your functions.php file and paste the following code:
+function member_check_shortcode($atts, $content = null) {
+  if (is_user_logged_in() && !is_null($content) && !is_feed()) {
+    return $content;
+  } else {
+    return 'Sorry, this part is only available to our members. Click here to become a member!';
+}
+
+add_shortcode('member', 'member_check_shortcode');
+
+
+Once that's done, you can add the following to your posts to create a section or text (or any other content) that will be displayed only to registered users:
+[member]
+This text will be displayed only to registered users.
+[/member]

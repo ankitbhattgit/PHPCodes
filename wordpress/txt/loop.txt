@@ -1,0 +1,124 @@
+
+
+ <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+ Three things are happening here:
+
+1.have_posts() is making sure there are posts to display.
+2.The same function will continually keep track of if we still have posts, which is why it's used as the while condition.
+3.the_post() unpacks the next post in the queue.
+
+
+WordPress automatically grabs the posts by querying the database based on the URL. You could also overwrite the original query by using WP_Query() or query_posts() to get your own information. In any case, as long as that query returns posts, have_posts() returns true and we enter The Loop.  We end The Loop in this way:
+
+       <?php endwhile; else: ?>
+
+
+
+    Template Tags-
+
+
+    the_title(): Gets the title of the post or page. It accepts three arguments: an HTML tag for before the title (named $before), an HTML tag for after the title (named $after), and $echo, the actual title itself.
+
+    the_time(): Gets the date the post or page was published.
+
+    the_content(): This will display the content of the post or page
+
+    the_excerpt(): Gets the first 55 words of the post, appending [...] to the end of the string.
+
+    the_category(): Gets the category (or categories) in which the posts are listed. For arguments, it accepts the separator, which will be printed in between categories;  and the post_id, which of course defaults to the current post.
+
+     the_tags(): Gets the tags added to the post.
+
+    the_permalink(): Gets the post's or page's URL in the format defined by the WordPress admin panel in Settings > Permalinks.
+
+   the_author(): This displays the post author's name.
+
+
+   It's also worth noting that most of these functions have accompanying 'get' functions – that is, get_the_title() – which would simply return the the value instead of printing it.
+
+   eg
+
+       <?php
+        query_posts('posts_per_page=1&category_name=breaking-news');
+        if ( have_posts() ) : while ( have_posts() ) : the_post();
+    ?>
+
+    <div class="breaking">
+        <h3>BREAKING: <a href="<?php the_permalink();?>"><?php the_title(); ?></a></h3>
+    </div>
+
+    <?php endwhile; endif; wp_reset_query(); ?>
+
+    generating several different Loops in a single template
+
+
+     <?php
+        $custom_posts= get_posts(array('numberposts' => 4, 'category'
+          => 3, orderby => 'title'));
+        foreach ($custom_posts as $custom_post) : setup_postdata($custom_post); ?>
+          <h3><?php the_title(); ?></h3>
+          <?php the_excerpt(); ?>
+        <?php endforeach; ?>
+
+
+
+
+
+Using Multiple Loops
+
+
+The following example features two distinct loops. Notice the rewind_posts() function on line 8. This example can be used on any WordPress file as is: index.php, single.php, etc.
+
+// First loop (get the last 3 posts in the "featured" category)
+
+<?php query_posts('category_name=featured&showposts=3'); ?>
+<?php while (have_posts()) : the_post(); ?>
+  <!-- Do stuff... -->
+<?php endwhile;?>
+
+//loop reset
+<?php rewind_posts(); ?>
+
+//Second loop (Get all posts)
+<?php while (have_posts()) : the_post(); ?>
+  <!-- Do stuff... -->
+<?php endwhile; ?>
+
+
+To use loop inside plugin first use
+ global $post
+
+
+ // use loop with custom sql queries
+
+<?php
+        global $wpdb,$userid, $upload_dir, $track_id,$artwork_url,$permalink_url,$posttitle,$song_content, $song_post_id,$cats;
+
+      if(isset($_GET['userid']) || isset($_GET['action']))
+      {
+             $follower_id = $userdata->id;
+             $userid = $_GET['userid'];
+             $user_info = get_userdata( $userid);
+           //  print_r($user_info);
+      }
+
+
+   $query = "SELECT  DISTINCT  $wpdb->posts.ID,$wpdb->postmeta.post_id,$wpdb->ratings.rating_postid,$wpdb->ratings.rating_rating,$wpdb->ratings.rating_posttitle FROM $wpdb->ratings INNER JOIN $wpdb->postmeta ON $wpdb->ratings.rating_postid = $wpdb->postmeta.post_id INNER JOIN $wpdb->posts ON $wpdb->postmeta.post_id = $wpdb->posts.ID where  rating_userid ='$userid' ORDER BY $wpdb->postmeta.post_id DESC";
+
+    $likeposts = $wpdb->get_results($query, OBJECT);
+
+
+             global $post;
+
+             setup_postdata($post);
+
+            $song_id = get_the_ID();
+               $cats = wp_get_post_categories($song_id);
+              $upload_id =  get_post_meta( $song_id,'track_upload_post_id',true);
+           $artwork_url =  get_post_meta( $song_id,'artwork_url',true);
+          $permalink_url =  get_post_meta( $song_id,'permalink_url',true);
+            $song_author_id = get_post_field( 'post_author', $song_id );
+              $song_author = get_the_author_meta('user_login',$song_author_id );
+
+?>

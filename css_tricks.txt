@@ -1,0 +1,135 @@
+
+put at start always
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins,form ,kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, label, legend, caption{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+	list-style:none;
+}
+
+
+hide second class in case of two class have same name
+
+.price-box:nth-of-type(1)
+{
+	display: none;
+}
+
+
+firefox only hack
+
+@-moz-document url-prefix() {
+ #admin_menu2 {
+    top: 15px !important;
+  }
+}
+
+How to move the next element below inside div
+
+<div style="float:left">Your Name (required)<br />
+    [text* your-name]
+</div>
+<div style="clear:both;"></div>
+
+
+
+rotate images
+
+
+#nav img
+{ -moz-transition: all 0.8s ease-in-out; -webkit-transition: all 0.8s ease-in-out; -o-transition: all 0.8s ease-in-out; -ms-transition: all 0.8s ease-in-out; transition: all 0.8s ease-in-out; }
+#nav img:hover
+{ -moz-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -ms-transform: rotate(360deg); transform: rotate(360deg); }
+
+
+
+How to make links blink on hover
+
+.icon ul li a:hover{
+ opacity:0.6;
+filter:alpha(opacity=60);
+transition: all 0.5s ease-out 0s;
+}
+
+
+
+how to make text colourless
+
+colour:transparent
+
+
+How to fixed the background according to the content
+
+In the outer div
+
+overflow:hidden;
+
+
+
+
+putting any image or slider in the middle with CSS
+
+
+ margin: 0px auto;
+
+
+how to remove data from a particular page in wp
+
+
+first check for the id in that particular page
+
+<body class="home page page-id-5 page-template page-template-page-template-home-lightbox-php logged-in admin-bar">
+
+
+then in the css file
+
+.page-id-5 .footer-callout {display:none !important;}
+
+
+
+
+
+
+http://browserhacks.com/
+
+
+
+/* will be red only in google chrome */
+
+#test1{color:green;}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #test1{color:red;}
+}
+
+
+
+
+ Internet Explorer
+
+
+ .selector { property: value\9; }
+.selector { property/*\**/: value\9; }
+
+
+Media Query Hacks
+
+
+@media screen\9 {}
+ Internet Explorer 7-
+
+
+
+ @media \0screen {}
+ Internet Explorer 8
+
+
+ (-ms-high-contrast: active), (-ms-high-contrast: none) {}
+ Internet Explorer 10

@@ -1,0 +1,35 @@
+
+.wrapper
+{
+	width:900px;
+	margin: auto;
+}
+
+ table
+{
+	margin: 0px auto;
+	 border: 1px solid;
+}
+
+
+th {
+    width: 200px;
+}
+
+
+td {
+    text-align: center;
+    width: 200px;
+}
+
+caption {
+    font-size: 26px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+img
+{
+	height:100px;
+	width:100px;
+}

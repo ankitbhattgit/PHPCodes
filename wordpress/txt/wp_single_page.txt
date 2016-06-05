@@ -1,0 +1,28 @@
+<?php
+/**
+ * The Template for displaying all single posts.
+ *
+ * @package WordPress
+ * @subpackage Twenty_Eleven
+ * @since Twenty Eleven 1.0
+ */
+
+get_header(); 
+get_sidebar();
+the_post();
+the_title();
+echo "<br><br>";
+ the_content(); 
+?>
+<br>
+posted at <?php the_time('F jS, Y');  ?> by <?php the_author(); ?><br>
+ <?php the_tags('Tags:',','); ?><br>
+category <?php the_category(','); 
+echo '<br><br>';
+comments_number();
+echo '<br><br>';
+comments_template();
+echo '<br><br><br>';
+next_post_link('%link');
+previous_post_link('%link');
+ get_footer(); ?>

@@ -1,0 +1,155 @@
+
+
+
+
+
+Create A Loop Of Images
+
+
+
+function catch_that_image() {
+  global $post, $posts;
+  $first_img = '';
+  ob_start();
+  ob_end_clean();
+  $output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches);
+  $first_img = $matches [1] [0];
+
+  if(empty($first_img)){ //Defines a default image
+    $first_img = "/images/default.jpg";
+  }
+  return $first_img;
+}
+
+
+Once you've saved the functions.php file, you are now ready to display your image loop.
+
+
+<?php
+if (have_posts()) :
+    while (have_posts()) : the_post(); ?>
+        <a href="<?php the_permalink();?>" title="<?php the_title(); ?>" class="img-loop">
+        <img src="http://media.smashingmagazine.com/wp-content/uploads/images/wordpress-loop-hacks/<?php echo catch_that_image() ?>" alt="<?php the_title(); ?>" />
+        </a>
+    endwhile;
+endif;
+?>
+
+
+
+
+
+Display Images Linking to Full Posts
+
+
+Another thing that is interesting to do in a category archive page is to replace the post content with an image that links to your post. To do this, you will first need to put images into the Excerpt sections of your posts. Here's how to do that, for one post:
+
+Upload an image on the post editing screen.
+Switch to the "Code" editor, rather than the "Visual" editor.
+Use the Uploads / Browse tab to insert the image into your post. Make sure to insert the full-sized image, with no link.
+Copy the inserted HTML img tag, and paste it into the "Optional Excerpt" section of the post editing screen.
+Finish writing the post content (you can remove the image), and publish the post.
+Now you will need to modify your template. We'll use a trick: the the_excerpt_rss() Template Tag does not put a paragraph tag around the excerpt. So we can use it to insert the img HTML and put it inside a link. Here's what you need to put into your Template, in place of using the_content:
+
+<a href="<?php the_permalink() ?>">
+<?php the_excerpt_rss(); ?>
+</a>
+
+
+
+
+ Auto-Resize Images Using TimThumb And WordPress Shortcodes
+
+Paste the following code in your functions.php file:
+function imageresizer( $atts, $content = null ) {
+	return '<img src="http://media.smashingmagazine.com/wp-content/uploads/2009/10//timthumb/timthumb.php?src='.$content.'&w=590" alt="" />';
+}
+
+add_shortcode('img', 'imageresizer');
+
+Now, you can use the following syntax to add an automatically resized image to your blog post:
+[img]http://www.yoursite.com/yourimage.jpg[/img]
+
+
+
+
+
+ To enable Post Thumbnails, the current theme must include add_theme_support( 'post-thumbnails' ); in its functions.php file. 
+
+<?php echo get_the_post_thumbnail( $post_id, $size, $attr ); ?> 
+
+
+Eg
+
+    <li>
+            <?php echo get_the_post_thumbnail($post->ID, 'thumbnail'); ?>
+            <h1><?php echo $post->post_title; ?></h1>
+            <?php echo $post->post_content; ?>
+        </li>
+
+
+
+
+featured
+
+
+<div id="featured">  <ul id="carousel">  
+        <?php  
+        $featured_posts = get_posts('numberposts=3&category=1');  
+          
+        foreach( $featured_posts as $post ) {  
+            $custom_image = get_post_custom_values('featured_image', $post->ID);  
+            $image = $custom_image[0] ? $custom_image[0] : get_bloginfo("template_directory")."/images/no-featured-image.jpg";  
+            printf('<li><a href="%s" title="%s"><img src="%s" alt="%s" /></a></li>', get_permalink($post->ID), $post->post_title, $image, $post->post_title);  
+        }  
+        ?>  
+    </ul>  <div class="clear"></div>  </div>
+
+/* Featured Post Carousel */  
+  
+#featured {  
+    padding: 10px 10px 0 20px;  
+    }  
+  
+#carousel {  
+    list-style: none;  
+    margin: 0;  
+    padding: 0;  
+    }  
+  
+#carousel li {  
+    float: left;  
+    padding: 0;  
+    margin-right: 10px;  
+    }  
+
+The first parameter specifies the key of the custom value we’re using, “featured_image”. The second parameter specifies what post we’re getting the value from.
+In the next line we do a quick check to see if an image was indeed specified. If no image was specified, we assign the $image variable the URL of the default image. If an image was specified, we use that.
+
+That’s it! Now, whenever you want to feature a post, assign it to the featured category and create a custom value with a key of “featured_image” and a value of the image URL. Images should be 233x130px.
+
+
+
+
+
+
+
+
+
+
+
+uploading images in wp
+
+
+
+
+$resume="/home/human003/public_html/wp-hs-content/uploads/2013/09/".$_FILES["resume"]["name"];
+
+move_uploaded_file($_FILES["resume"]["tmp_name"],"/home/human003/public_html/wp-hs-content/uploads/2013/09/".$_FILES["resume"]["name"]);
+
+
+
+how to check if image field is set or not 
+
+if($_FILES['img']['name']!="" and isset($_FILES['img']['name']))
+

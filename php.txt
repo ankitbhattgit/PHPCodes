@@ -1,0 +1,238 @@
+
+
+
+How to delete an element from an array in php?
+
+$anArray = array("X", "Y", "Z");
+
+unset($anArray[0]);
+
+//'dumps' the content of $anArray to the page:
+var_dump($anArray);  
+
+
+Unset leaves all of the index values the same after an element is deleted
+
+
+
+Using array_splice to delete an element from an array
+
+$anArray = array("V", "W", "X", "Y", "Z");
+
+/*The 2 represents the offset - which basically
+means move 2 positions from the  beginning of the
+array and that will take us to the "X" element.  The 1 
+represents the length of the array that you want to 
+delete.  Since we just want to delete 1 element, we
+set the length parameter to 1.
+
+And, since we are not replacing that element with anything
+- we do just want to delete it - we leave the 4th parameter (
+which is optional) blank
+*/
+
+array_splice($anArray, 2, 1);
+var_dump($anArray);
+
+
+
+An example of deleting an element in an array if you only know the value in PHP
+
+$key = array_search($valueToSearch,$arrayToSearch);
+if($key!==false){
+    unset($array[$key]);
+}
+
+
+
+
+
+
+how would you convert a PHP variable to a string?
+
+// this is an integer:
+$nonStringVar = 123;
+
+/*now $stringVar is a string because
+   the "(string)" performs a type cast
+   and returns the string equivalent
+   of the integer
+*/
+$stringVar = (string)$nonStringVar;
+
+
+
+
+What is the best way to return data in the JSON format from PHP?
+
+
+Example of returning JSON from PHP
+
+$tennisArray = array('Djokovic' => 1, 'Federer' => 2, 
+'Nadal' => 3, 'Murray' => 4);
+
+echo json_encode($tennisArray);
+The code above will output the JSON formatted data like this:
+
+{"Djokovic":1,"Federer":2,"Nadal":3,"Murray":4}
+
+
+
+
+
+How to retrieve the values returned from a function in PHP
+
+
+
+list($var1, $var2)  = 
+     someFunc( ); 
+
+//will print out values from someFunc
+echo "$var1 $var2"; 
+
+
+
+
+How to connect to a URL in PHP?
+
+
+ PHP provides a library called cURL that may already be included in your installation of PHP by default. cURL stands for client URL, and it allows you to connect to a URL and retrieve information from that page – like the HTML content of the page, the HTTP headers and their associated data, etc. 
+
+
+
+how to refresh the current page in php
+
+header("location:".$_SERVER["PHP_SELF"]);  
+
+
+redirecting in php through html 
+
+ echo '<meta http-equiv="refresh" content="1; url=add_product.php">';
+
+
+ 302 redirect 
+
+
+
+www to non www version 
+
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+
+
+how to get the id of the last insert query
+
+ echo mysql_insert_id();
+
+
+How to delete data from two tables
+
+
+delete t1,t2 from product as t1 left join images as t2 ON t2.prod_id=t1.pid where pid=31
+
+
+inserting muyltiple data in a coloum
+
+"insert into images (name) values ('saneeep'),('ankit'),('rahul')";
+
+
+Uploading multiple images 
+
+$images=$_FILES['image']['name'];
+$i=0;
+foreach ($images as $value) 
+{
+$tmp=$_FILES["image"]["tmp_name"][$i];
+$path="upload/".$value;
+$upload=move_uploaded_file($tmp,$path);
+$i++;
+}
+
+$sql="insert into tblname (name) values ('saneeep'),('ankit'),('rahul')";
+//}
+?>
+<center></br></br>
+<form action="" method="post" enctype="multipart/form-data">
+	Add image1<input type="file" name="image[]" /> <br>
+    Add image1<input type="file" name="image[]" /> <br>
+    Add image1<input type="file" name="image[]" /> <br>  
+</br></br>
+<input type="submit" name="submit"/>
+	</center>
+
+
+
+
+
+
+Check whether a page is home page
+
+<?
+$homepage = "/index.php";
+$currentpage = $_SERVER['REQUEST_URI'];
+if($homepage==$currentpage) {
+echo "links links links links";
+}
+?>
+
+
+
+
+Check whether the contents of a directory has been modified 
+
+
+<?php
+$dir="media/";
+$mtime = @filemtime($dir);
+echo "Last Modified on " .@date("Y-m-d H:i:s.",$mtime);
+echo "<br/>";
+$date=@date("Y-m-d H:i:s.",$mtime);
+
+$my_file = 'cronfile.txt';
+$handle = fopen($my_file, 'r');
+$data = fread($handle,filesize($my_file));
+echo $data;
+
+if($date==$data)
+{
+echo "no changes";
+fclose($handle);
+}
+else
+{
+$handle=fopen($my_file,'w') or die('Cannot open file:  '.$my_file);
+$data = $date;
+fwrite($handle, $data);
+echo "file has been modified";
+fclose($handle);
+mail("anks327@gmail.com","Cron Job message","A new file has been added to the media folder http://cumbriacrack.com/media/");
+}
+?> 
+
+
+
+
+Absolutely comaparing the time
+
+
+<?php
+
+$date1=@date("Y-m-d H:i:s.",$mtime);
+$date2= @date('Y-m-d H:i:s');
+
+if(@date('Ymd his', strtotime($date1)) == @date('Ymd his', strtotime($date2)))
+{
+   echo "same date";
+}
+
+
+get absolute path
+
+
+ <?php
+ $p = getcwd();
+ echo $p;
+ ?>

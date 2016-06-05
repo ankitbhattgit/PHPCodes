@@ -1,0 +1,61 @@
+
+Prevent Unnecessary Info From Being Displayed
+
+ open your theme's file  functions.php in wp-content  directory , and paste the following code:
+
+add_filter('login_errors',create_function('$a', "return null;"));
+
+
+ Use .htaccess To Protect The wp-config File
+
+
+<files wp-config.php>
+order allow,deny
+deny from all
+</files>
+
+
+Protect Your WordPress Blog From Script Injections
+
+
+Paste it in your .htaccess file (located in the root of your WordPress installation). 
+
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
+RewriteRule ^(.*)$ index.php [F,L]
+
+
+
+Prevent Directory Browsing
+
+.htaccess file:
+
+
+Options -Indexes
+
+
+
+
+change the default database prefix before making the installation.
+
+You can easily do this by modifying the following line in the wp-config-sample.php file:
+
+$table_prefix = 'wp_';
+Change it to something more complex, for example:
+
+$table_prefix = '1w27p_';
+
+
+
+
+Restrict the access to most files in the wp-includes and wp-content folders. The access to everything except images, CSS and JavaScript files can be blocked.
+
+To do this, create a .htaccess file and place the following rules in it:
+
+Order Allow, Deny, Deny from all
+
+<Files ~ ".(css|jpe?g|png|gif|js)$">Allow from all</Files>
+

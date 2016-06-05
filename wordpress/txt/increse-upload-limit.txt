@@ -1,0 +1,30 @@
+
+
+ functions.php
+
+ // Increase max upload file size and execution time
+@ini_set( 'upload_max_size' , '20M' );
+@ini_set( 'post_max_size', '20M');
+@ini_set( 'max_execution_time', '300' );
+
+
+wp-config.php
+
+define('WP_MEMORY_LIMIT', '20M');
+
+
+.htaccess
+
+php_value upload_max_filesize 20M
+php_value post_max_size 20M
+php_value memory_limit 20M
+php_value max_execution_time 300
+
+
+Finally, I created two files, php.ini and php5.ini, with the following lines
+and added both files to the wp-admin folder.
+
+    upload_max_filesize = 20M; 
+    post_max_size = 20M;
+    max_execution_time = 300;
+

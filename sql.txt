@@ -1,0 +1,15 @@
+
+
+use in when subquery returns more than 1 result
+
+SELECT sum(rating_rating) FROM $wpdb->ratings WHERE rating_postid IN (SELECT ID FROM $wpdb->posts WHERE post_author = '$userid')
+
+
+when sorted numeric values on wp post meta table
+
+order by CAST(`meta_value` AS DECIMAL) desc;
+
+
+MULTIPLE JOINS
+
+SELECT * from wp_posts  INNER JOIN wp_postmeta ON (wp_posts.ID = wp_postmeta.post_id) INNER JOIN wp_term_relationships ON (wp_posts.ID = wp_term_relationships.object_id) where wp_posts.post_type = "song" AND wp_postmeta.meta_key = "epicredvote" AND wp_term_relationships.term_taxonomy_id = '.$cat_id.' order by CAST(`meta_value` AS DECIMAL) desc

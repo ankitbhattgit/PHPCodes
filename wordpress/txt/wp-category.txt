@@ -1,0 +1,71 @@
+
+
+
+
+EXCLUDING A CATEGORY FROM THE BLOG PAGE
+
+
+ Simply identify the category ID for the "Press Releases" category (hovering the mouse over the category name in the admin panel and looking at the URL in the status bar is an easy way to find the ID - let's use 5 for the example), and insert the following code above the post loop:
+query_posts("cat=-5");
+
+
+
+
+
+Displaying categories without title and excluding specific 
+
+<h2>Categories</h2>
+                        <ul>
+           <?php wp_list_categories('title_li=&exclude=14,12'); ?>
+                        
+                        </ul>
+
+
+
+
+ pull out every category and tag the post is associated with, and display them with a comma delimiter
+
+
+get_the_category_list( ', ' );  
+
+$tags_list = get_the_tag_list( '', ', ' );
+
+
+
+display last 10 posts from category
+
+<?php query_posts('category_name=baseball&posts_per_page=10'); ?>  or <?php query_posts( 'cat=33' ); ?>
+<?php while (have_posts()) : the_post(); ?> 
+
+or
+
+add this before the loop
+
+global $query_string;
+query_posts("{$query_string}&posts_per_page=15");
+
+
+If you want to show more than one category, you can add the IDs separated with comas:
+
+<?php query_posts( 'cat=33,44,55,66' ); ?>
+
+
+Hide a WordPress Category Posts
+
+
+<?php if (is_front_page() && !is_paged() 
+) $posts = query_posts($query_string . '&cat=-33,-66'); ?>
+
+
+
+
+get record from single tag
+
+
+<?php   
+query_posts( 'tag=apples' );  
+if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>  
+// DO SOMETHING WITH EACH POST THAT WE FOUND  
+<?php endwhile; else: ?>  
+// DO SOMETHING IF NOTHING WAS FOUND  
+<?php endif; ?> 

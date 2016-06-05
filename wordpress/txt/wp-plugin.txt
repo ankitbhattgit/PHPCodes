@@ -1,0 +1,189 @@
+
+
+
+Actions Add Functionality
+
+An ‘Action’, gives an indication of an event that has happened. An Action Hook provides an opportunity to hook in your function, after the event has occurred. For example, ‘init’ is a default action hook. The ‘init’ event is fired after WordPress has finished loading, but before any headers are sent. When this event is fired, all actions hooked on this event will be called.
+
+For example, say on ‘init’ hook you want to do some action; you will have to add your function as follows:
+
+add_action( 'init', 'mycustom_action' );
+function mycustom_action()
+{
+  // write something here
+}
+
+
+Filters Modify Value
+
+A Filter is basically used to set an option value in the database. The value is usually set before some operation is performed, to modify some parameters of the operation. For example, consider your theme displays 10 latest posts on the homepage. If you wanted to display only 5 posts, you will have to use the ‘pre_get_posts’ filter and set ‘posts_per_page’ to 5.
+
+add_action( 'pre_get_posts', 'mycustom_filter' );
+function mycustom_filter( $query ) {
+   if ( $query->is_home() && $query->is_main_query() ) {
+       $query->set('posts_per_page', 5 );
+   }
+}
+
+
+child plugin
+
+Hooks are a way for one piece of code to interact with and modify another piece of code. If the plugin you want to modify offers hooks, you can use them to extend the plugins functionality.
+
+Get Your Most Popular Posts Without A Plug-In
+
+
+ Just paste the following code anywhere in your theme files (for example, in sidebar.php). To change the number of displayed posts, simply change the "5" on line 3 to your desired number.
+
+
+<h2>Popular Posts</h2>
+<ul>
+<?php $result = $wpdb->get_results("SELECT comment_count,ID,post_title FROM $wpdb->posts ORDER BY comment_count DESC LIMIT 0 , 5");
+foreach ($result as $post) {
+setup_postdata($post);
+$postid = $post->ID;
+$title = $post->post_title;
+$commentcount = $post->comment_count;
+if ($commentcount != 0) { ?>
+
+<li><a href="<?php echo get_permalink($postid); ?>" title="<?php echo $title ?>">
+<?php echo $title ?></a> {<?php echo $commentcount ?>}</li>
+<?php } } ?>
+
+</ul>
+
+
+
+
+
+
+Display Related Posts... With Thumbnails
+
+
+Simply paste this code after the the_content() function in your single.php file:
+
+
+<?php
+$original_post = $post;
+$tags = wp_get_post_tags($post->ID);
+if ($tags) {
+  echo '<h2>Related Posts</h2>';
+  $first_tag = $tags[0]->term_id;
+  $args=array(
+    'tag__in' => array($first_tag),
+    'post__not_in' => array($post->ID),
+    'showposts'=>4,
+    'caller_get_posts'=>1
+   );
+  $my_query = new WP_Query($args);
+  if( $my_query->have_posts() ) {
+    echo "<ul>";
+    while ($my_query->have_posts()) : $my_query->the_post(); ?>
+      <li><img src="<?php bloginfo('template_directory'); ?>/timthumb/timthumb.php?src=<?php echo get_post_meta($post->ID, "post-img", true); ?>&h=40&w=40&zc=1" alt="" /><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+    <?php endwhile;
+    echo "</ul>";
+  }
+}
+$post = $original_post;
+wp_reset_query();
+?>
+
+
+
+
+
+Display Your Most Popular Content In The Sidebar
+
+
+<h2>Popular Posts</h2>
+<ul>
+<?php $result = $wpdb->get_results("SELECT comment_count,ID,post_title FROM $wpdb->posts ORDER BY comment_count DESC LIMIT 0 , 5");
+foreach ($result as $post) {
+setup_postdata($post);
+$postid = $post->ID;
+$title = $post->post_title;
+$commentcount = $post->comment_count;
+if ($commentcount != 0) { ?>
+<li><a href="<?php echo get_permalink($postid); ?>" title="<?php echo $title ?>">
+
+<?php echo $title ?></a> {<?php echo $commentcount ?>}</li>
+<?php } } ?>
+</ul>
+
+
+
+
+
+Plug-In To Protect Your Blog From Malicious URL Requests
+
+
+<?php
+/*
+Plugin Name: Block Bad Queries
+Plugin URI: http://perishablepress.com/press/2009/12/22/protect-wordpress-against-malicious-url-requests/
+Description: Protect WordPress Against Malicious URL Requests
+Author URI: http://perishablepress.com/
+Author: Perishable Press
+Version: 1.0
+*/
+
+global $user_ID;
+
+if($user_ID) {
+  if(!current_user_can('level_10')) {
+    if (strlen($_SERVER['REQUEST_URI']) > 255 ||
+      strpos($_SERVER['REQUEST_URI'], "eval(") ||
+      strpos($_SERVER['REQUEST_URI'], "CONCAT") ||
+      strpos($_SERVER['REQUEST_URI'], "UNION+SELECT") ||
+      strpos($_SERVER['REQUEST_URI'], "base64")) {
+        @header("HTTP/1.1 414 Request-URI Too Long");
+	@header("Status: 414 Request-URI Too Long");
+	@header("Connection: Close");
+	@exit;
+    }
+  }
+}
+?>
+
+
+
+
+diable plugin updates
+
+function filter_plugin_updates( $value ) {
+    unset( $value->response['contact-form-7/wp-contact-form-7.php'] );
+    return $value;
+}
+add_filter( 'site_transient_update_plugins', 'filter_plugin_updates' );
+
+
+
+
+
+plugin url
+
+    echo $plugin_url = plugin_dir_path( __FILE__ );
+   echo $plugin_url = plugin_basename( __FILE__ );
+   $purl=plugins_url("/odude-ecard/include/viewcard.php");
+
+
+// add a hook after a new user is inserted in the database
+
+   add_action('user_register','follow_user_admin');
+
+ function follow_user_admin($user_id)
+{
+  global $wpdb;
+
+  $wpdb->insert(
+                              'wp_user_relation',
+                                array(
+                                           'user_id' =>  1,
+                                         'follower_id' => $user_id
+                                         ),
+                              array(
+                                        '%d',
+                                       '%d'
+                                       )
+                     );
+}

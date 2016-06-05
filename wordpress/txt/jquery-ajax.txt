@@ -1,0 +1,115 @@
+
+
+Every AJAX request goes through the admin-ajax.php file in the wp-admin folder. That this file is named admin-ajax might be a bit confusing. I quite agree, but this is just how the development process turned out. So, we should use admin-ajax.php for back-end and user-facing AJAX.
+
+
+Each request needs to supply at least one piece of data (using the GET or POST method) called action. Based on this action, the code in admin-ajax.php creates two hooks, wp_ajax_my_action and wp_ajax_nopriv_my_action, where my_action is the value of the GET or POST variable action.
+
+
+
+        check if jquery is loaded or not
+
+
+  <?php if(wp_script_is('jquery')) {
+   echo 'load';
+} else {
+ echo 'not';
+}
+?>
+
+         <script type="text/javascript">
+
+           var image = <?php echo json_encode($pic); ?>;
+           var rec_loc = <?php echo json_encode($odudestat[0]->R_location); ?>;
+           var rec_unit = <?php echo json_encode($odudestat[0]->R_unit); ?>;
+           var rec_room = <?php echo json_encode($odudestat[0]->R_room); ?>;
+           var to = <?php echo json_encode($odudestat[0]->RN);?>  + <?php echo json_encode($odudestat[0]->RL);?>;
+           var from = <?php echo json_encode($odudestat[0]->SN);?> +  <?php echo json_encode($odudestat[0]->SL); ?>;
+           var message = <?php echo json_encode($odudestat[0]->body); ?>;
+           //var data = 'image='+ image + 'rec_loc='+ rec_loc + 'rec_unit'+ rec_unit + 'rec_room'+ rec_room + 'to'+ to + 'from'+ from + 'message' + message;
+
+           jQuery.post("<?php echo plugins_url("/odude-ecard/include/viewcard.php"); ?>", {image:image,rec_loc:rec_loc,rec_unit:rec_unit,rec_room:rec_room,to:to,from:from,message:message}, function(data) {
+
+		} );
+
+
+
+
+    $('#load-more').on('click', function(e) {
+
+      e.preventDefault();
+
+
+
+      //possibly gray out button - ON CALLBACK!
+
+      if (config.page === config.max_pages) {
+
+        return;
+
+      }
+
+
+
+      $.ajax({
+
+        url: <?php echo "'".admin_url('admin-ajax.php')."'"; ?>,
+
+        type: 'GET',
+
+        data: {
+
+          action: 'ajax_custom_load_posts',
+
+          page: config.page + 1,
+
+          username: config.username
+
+        },
+
+        success: function(data) {
+
+          blog_body.append(data);
+
+          config.page++;
+
+          Tree.responsiveVideos();
+
+        }
+
+      });
+
+    });
+
+
+
+    Tree.responsiveVideos();
+
+  });
+
+
+
+</script>
+
+
+
+se the built-in jQuery Form plugin to submit forms
+
+add_action( 'wp_enqueue_scripts', 'myajax_load_jquery_form' );
+
+function myajax_load_jquery_form() {
+ wp_enqueue_script( 'jquery-form' );
+}
+
+jQuery('#myForm1').ajaxForm({
+ data: {
+ // additional data to be included along with the form fields
+ },
+ dataType: 'json',
+ beforeSubmit: function(formData, jqForm, options) {
+ // optionally process data before submitting the form via AJAX
+ },
+ success : function(responseText, statusText, xhr, $form) {
+ // code that's executed when the request is processed successfully
+ }
+});

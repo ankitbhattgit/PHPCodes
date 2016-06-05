@@ -1,0 +1,249 @@
+html
+
+            <form name="loginform" id="loginform" action="http://localhost/wordpress/wp-login.php" method="post">
+              <div class="form-group">
+                <input type="text" class="form-control user_icon" id="lgn-user" placeholder="Username" name="log">
+                <input type="password" class="form-control password_icon" id="lgn-pass" placeholder="Password" name="pwd">
+              </div>
+              <div class="form-group">
+                <div id="loader-image"></div>
+                <button type="button" id="login-btn" class="btn btn-danger btn_style">Join Now</button>
+              </div>
+              <div class="already_account">
+                <p>Don't have an account? <a href="#">Sign Up.</a></p>
+              </div>
+              <div class="social_btn">
+                <div class="google_plus"> <a onclick="_gaq.push(['_trackEvent', 'btn-social', 'click', 'btn-google']);" class="btn btn-block btn-social btn-google"> <i class="fa fa-google-plus"></i> Sign in </a> </div>
+                <div class="facebook_btn"> <a onclick="_gaq.push(['_trackEvent', 'btn-social', 'click', 'btn-facebook']);" class="btn btn-block btn-social btn-facebook"> <i class="fa fa-facebook"></i> Sign in</a> </div>
+              </div>
+            </form>
+
+
+
+
+            custom.js
+
+
+            jQuery(document).ready(function() {
+    jQuery('.popup-login-form').magnificPopup({
+          items: {
+             src: '#login-form',
+             type: 'inline'
+          }
+   });
+
+   jQuery('.popup-signup-form').magnificPopup({
+          items: {
+             src: '#signup-form',
+             type: 'inline'
+          }
+   });
+
+   jQuery("#login-button").click(function() {
+       jQuery(".error").css('display', 'none');
+       jQuery("#lgn-user").val('');
+       jQuery("#lgn-pass").val('');
+       jQuery('#loader-image').html('');
+       jQuery("#login-btn").removeAttr('disabled');
+   });
+
+   /* Handles Login functionality */
+
+   jQuery("#login-btn").click(function() {
+       var username = jQuery("#lgn-user").val();
+       var password = jQuery("#lgn-pass").val();
+                   var url      = window.location.href;
+
+
+       if(username == '') {
+           jQuery(".error").css('display', 'block');
+           jQuery("#lgn-user").focus();
+           jQuery(".error > ul").html('<li>Please enter your username.');
+           return false;
+       }
+
+       if(password == '') {
+           jQuery(".error").css('display', 'block');
+           jQuery("#lgn-pass").focus();
+           jQuery(".error > ul").html('<li>Please enter your password.');
+           return false;
+       }
+
+       else {
+
+
+          jQuery(".error").css('display', 'none');
+          jQuery.ajax({
+              type: 'POST',
+              dataType : 'json',
+              url: ajax_login_object.ajaxurl,
+              data: {
+                 action: "ajaxlogin",
+                 username: username,
+                 password: password
+              },
+              beforeSend:function(){
+                     jQuery("#loader-image").css('display','block');
+                    jQuery('#loader-image').html('<img src="'+theme_url+'/images/loading.gif" alt="Loading...." > Please wait . . . ');
+                         jQuery('#loader-image').css('margin', '5px');
+                 jQuery("#login-btn").attr('disabled', 'disabled');
+              },
+              success:function(data) {
+
+                         var result =  data.loggedin;
+                        if(result == true)
+                        {
+                              document.location.href = url;
+                               return false;
+                        }
+                        else{
+                                   jQuery(".error").css('display', 'block');
+                                   jQuery("#lgn-user").focus();
+                                   jQuery(".error > ul").html('<li>' + data.message);
+                                    jQuery("#login-btn").prop('disabled', false);
+                                      jQuery("#loader-image").css('display','none');
+                                   return false;
+
+                        }
+
+              },
+              error:function() {
+
+
+              }
+          });
+       }
+   });
+
+   /* Handles Sign in functionality */
+    jQuery("#signup-form input").blur(function(){
+         if(jQuery(this).val() != ""){
+               jQuery(this).removeClass('req-error');
+         }
+      });
+
+   jQuery("#signup-button").click(function() {
+       jQuery(".error").css('display', 'none');
+       jQuery("#reg-user").val('');
+       jQuery("#reg-email").val('');
+       jQuery("#reg-pass").val('');
+       jQuery("#reg-cpass").val('');
+       jQuery('#loader-image').html('');
+       jQuery("#register-btn").removeAttr('disabled');
+   });
+
+   jQuery("#signup_form").submit(function(e) {
+        e.preventDefault();
+       var username = jQuery("#reg-user").val();
+       var email = jQuery("#reg-email").val();
+       var password = jQuery("#reg-pass").val();
+       var confirm_password = jQuery("#reg-cpass").val();
+       var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+
+       var obj = {
+           "username": "Please provide your username.",
+           "email": "Please provide your email address.",
+           "password": "Please fill the password field.",
+           "confirm_password" : "Please fill the confirm password field."
+       };
+
+       if(username == '' || email == ''  || password == '' || confirm_password == '') {
+           jQuery(".error").css('display', 'block');
+           jQuery(".error > ul").html('<li>All fields are required.');
+           jQuery.each(obj,function(key,value){
+              if(jQuery("#signup-form input[name='"+key+"']").val() == ""){
+                  jQuery("#signup-form input[name='"+key+"']").addClass('req-error');
+              } else {
+              jQuery("#signup-form input[name='"+key+"']").removeClass('req-error');
+              }
+           });
+           return false;
+       }
+
+       if(!emailReg.test(email)) {
+           jQuery(".error").css('display', 'block');
+           jQuery("#reg-email").val('');
+           jQuery("#reg-email").focus();
+           jQuery(".error > ul").html('<li>Please enter valid email address.');
+           return false;
+       }
+
+       if(password != confirm_password) {
+           jQuery(".error").css('display', 'block');
+           jQuery("#reg-pass").val('');
+           jQuery("#reg-cpass").val('');
+           jQuery("#reg-pass").focus();
+           jQuery(".error > ul").html('<li>Password and confirm password field are not same.');
+           return false;
+       } else {
+           sdata = jQuery("#signup_form").serialize();
+           jQuery(".error").css('display', 'none');
+           jQuery.ajax({
+              type: 'POST',
+              dataType : 'json',
+              url: ajax_url,
+              data: {
+                 action: "registrationprocess",
+                 info: sdata
+              },
+              beforeSend:function(){
+                 jQuery('#loader-image').html('<img src="'+theme_url+'/images/loading.gif" alt="Loading...." > Please wait while you are redirecting.');
+                 jQuery('#loader-image').css('margin', '5px');
+                 jQuery("#register-btn").attr('disabled', 'disabled');
+              },
+              success:function(data) {
+
+              },
+              error:function() {
+
+              }
+          });
+       }
+
+   });
+
+});
+
+
+
+functions.php
+
+
+    wp_enqueue_script( 'audiobeat-customjs', get_template_directory_uri() . '/js/custom.js', array('jquery'), '20150718', true );
+
+        wp_localize_script('audiobeat-customjs', 'ajax_url', $ajax_url);
+    wp_localize_script('audiobeat-customjs', 'theme_url', $theme_url);
+
+      wp_localize_script( 'audiobeat-customjs', 'ajax_login_object', array(
+            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+        ));
+
+
+             add_action( 'wp_ajax_nopriv_ajaxlogin', 'ajax_login' );
+      add_action( 'wp_ajax_ajaxlogin', 'ajax_login' );
+
+
+
+
+
+
+function ajax_login()
+{
+     $home = home_url();
+    // echo $home;
+
+       $info['user_login'] = $_POST['username'];
+        $info['user_password'] = $_POST['password'];
+        $info['remember'] = true;
+
+        $user_signon = wp_signon($info,false);
+         if( is_wp_error($user_signon) ) {
+            echo json_encode(array('loggedin'=>false,'message'=>__('Wrong username or password')));
+         }
+         else{
+
+            echo json_encode(array('loggedin'=>true,'message'=>__('Login successful, redirecting...')));
+
+         }
+         exit();
+}
